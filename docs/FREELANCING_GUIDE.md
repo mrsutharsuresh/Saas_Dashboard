@@ -74,3 +74,27 @@ Assuming you are selling to a local Professional (e.g., a CA firm or Law firm):
 *   **Usage Costs**: Pass through WhatsApp/Gemini API costs to them.
 
 This model is very attractive to Indian SMEs because the upfront risk is lower (~50k) compared to hiring an agency (~5L).
+
+---
+
+## 4. Structuring "Equity + Cash" Deals
+Since your client is a solo founder open to sharing equity, use this **Hybrid Model** to balance risk.
+
+### The Golden Rule
+> **Never trade 100% of your fee for equity** in an early-stage startup. 90% of startups fail, making that equity worth ₹0. Always cover your basic costs.
+
+### The Framework
+1.  **Discounted Cash**: You charge 60-70% of your market rate.
+    *   *Example*: Instead of ₹80k for the MVP, you charge ₹50k.
+2.  **Equity Sweating**: The remaining 30-40% "discount" is converted into equity or profit sharing.
+    *   *Typical Range*: 1% - 5% advisor equity, vesting over 2 years.
+
+### Transition Strategy: Milestone -> Hourly
+This is the safest path for you as a beginner:
+1.  **Phase 1 (The Build)**: **Fixed Price Milestones**.
+    *   Protect yourself from "scope creep" (endless small changes).
+    *   Get paid for *deliverables* (e.g., "Login works", "Scraper works").
+2.  **Phase 2 (Post-Launch)**: **Hourly / Retainer**.
+    *   Once the app is live, bugs and new features are unpredictable.
+    *   Switch to an hourly rate (e.g., ₹1,000/hr) or a monthly retainer (e.g., ₹10k/month for up to 10 hours) for ongoing support.
+
