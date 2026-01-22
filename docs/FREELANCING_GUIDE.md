@@ -98,3 +98,27 @@ This is the safest path for you as a beginner:
     *   Once the app is live, bugs and new features are unpredictable.
     *   Switch to an hourly rate (e.g., ₹1,000/hr) or a monthly retainer (e.g., ₹10k/month for up to 10 hours) for ongoing support.
 
+---
+
+## 5. API-as-a-Service (Usage-Based Pricing)
+Yes, specifically for "Scraping" or "Data" projects like this, there is a third model: **The Hosted API Model**.
+
+### How it works
+Instead of selling the *code*, you sell the *service*.
+1.  **You Own the Code**: You host the fast API and the scrapers on your own AWS/DigitalOcean account.
+2.  **Client Gets an API Key**: The client's funding pays for a simple frontend, but they call *your* backend.
+3.  ** billing**: You charge per "Transaction" or "Record".
+
+### Example for This Dashboard
+*   **Infrastructure**: You pay the server costs (~$20/mo).
+*   **Pricing**: 
+    *   **₹5 to ₹10 per successful scrape**.
+    *   If they track 1,000 records/day = ₹5,000/day revenue (potential goldmine, but hard to sell initially).
+    *   **Or Tiered**: "Up to 500 records/month for ₹10,000".
+
+### Pros & Cons
+*   **Pros**: Massive upside if they scale. You keep the IP. Recurring revenue.
+*   **Cons**: You are on the hook for downtime. If the government portal changes and your scraper breaks, you stop making money immediately until you fix it.
+*   **Verdict**: Riskier for a solo beginner. Stick to **Retainer** for now.
+
+
