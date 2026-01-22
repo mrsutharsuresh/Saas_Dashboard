@@ -121,4 +121,28 @@ Instead of selling the *code*, you sell the *service*.
 *   **Cons**: You are on the hook for downtime. If the government portal changes and your scraper breaks, you stop making money immediately until you fix it.
 *   **Verdict**: Riskier for a solo beginner. Stick to **Retainer** for now.
 
+---
+
+## 6. Per-API / Per-Feature Development Pricing
+This is a very common way to break down a "Fixed Price" quote. You charge distinct rates for developing specific types of API endpoints based on complexity.
+
+### The Pricing Matrix (Estimates)
+
+| API Type | Complexity | Example in This Project | Rate Range (Per Endpoint) |
+| :--- | :--- | :--- | :--- |
+| **Simple CRUD** | Low | `POST /add-client`, `GET /projects` | ₹2,000 - ₹5,000 |
+| **Logic/Integration** | Medium | `POST /send-whatsapp` (Requires 3rd party API integration) | ₹5,000 - ₹10,000 |
+| **Complex/Heavy** | High | `POST /scrape-portal` (Requires Playwright, Captcha, Retries) | ₹15,000 - ₹25,000+ |
+
+### How to Quote
+"I will build the backend for ₹X total, consisting of:"
+1.  5 Basic Endpoints (User, Client, Auth) @ ₹3k = ₹15k
+2.  1 WhatsApp Integration Endpoint @ ₹8k = ₹8k
+3.  1 Core Scraper Logic Endpoint @ ₹20k = ₹20k
+**Total Quote**: ₹43,000
+
+*   **Pros**: Transparency. If they remove a feature (e.g., "We don't need WhatsApp yet"), you simply deduct that line item.
+*   **Cons**: You must be strict. If a "Simple" endpoint turns out to need complex validation, you lose money unless you renegotiate.
+
+
 
