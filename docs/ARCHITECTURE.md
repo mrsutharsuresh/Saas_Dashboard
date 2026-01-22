@@ -7,29 +7,29 @@ This document outlines the architecture for the Multi-Tenant SaaS Dashboard. The
 
 ```mermaid
 graph TD
-    Client[End-Client / Professional] -->|HTTPS| CDN[CDN / Frontend Host]
-    CDN --> ReactApp[React SPA (Vite)]
+    Client["End-Client / Professional"] -->|HTTPS| CDN["CDN / Frontend Host"]
+    CDN --> ReactApp["React SPA (Vite)"]
     
-    ReactApp -->|REST/JSON| API[FastAPI Backend]
+    ReactApp -->|REST/JSON| API["FastAPI Backend"]
     
     subgraph "Backend Infrastructure"
-        API -->|Read/Write| DB[(PostgreSQL)]
-        API -->|Cache/PubSub| Redis[(Redis)]
-        API -->|Enqueue Jobs| Queue[Task Queue (Celery/ARQ)]
+        API -->|Read/Write| DB[("PostgreSQL")]
+        API -->|Cache/PubSub| Redis[("Redis")]
+        API -->|Enqueue Jobs| Queue["Task Queue (Celery/ARQ)"]
     end
     
     subgraph "Worker Layer"
-        Queue --> Worker[Python Worker]
-        Worker -->|Headless Browser| Scraper[Playwright Engine]
-        Worker -->|API Call| ExtData[3rd Party Data Provider]
-        Worker -->|Review| AI[Google Gemini API]
+        Queue --> Worker["Python Worker"]
+        Worker -->|Headless Browser| Scraper["Playwright Engine"]
+        Worker -->|API Call| ExtData["3rd Party Data Provider"]
+        Worker -->|Review| AI["Google Gemini API"]
     end
     
     subgraph "Notification Layer"
-        Worker -->|Send Msg| WhatsApp[WhatsApp Business API]
+        Worker -->|Send Msg| WhatsApp["WhatsApp Business API"]
     end
     
-    Scraper -->|Target| GovPortal[Regional Gov Portal]
+    Scraper -->|Target| GovPortal["Regional Gov Portal"]
 ```
 
 ## Core Components
