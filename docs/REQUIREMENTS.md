@@ -1,66 +1,76 @@
 # Functional Requirements & Build List
 
-## 1. User Roles & Permissions
+## 1. Project Overview
+A specialized B2B SaaS platform designed to bridge data gaps between government portals and professional users.
+**Core Value**: Real-time data aggregation, AI-driven voice processing, and controlled client communication via a Mobile-First PWA experience.
 
-### Super Admin
-*   [ ] Dashboard to view total active tenants, API usage metrics, and system error logs.
-*   [ ] Ability to disable/suspend a Professional account.
-*   [ ] Configuration management for global API keys (e.g., WhatsApp, Gemini).
+## 2. User Roles & Dashboards
 
-### Professional (The Subscriber)
-*   [ ] **Onboarding**: Sign up, profile setup, WhatsApp Business verification status.
-*   [ ] **Project Management**:
-    *   Add new Project (Input: Application Number / ID).
-    *   View grid of all tracked projects with current status.
-    *   Manual "Refresh" button for specific projects.
-*   [ ] **Client Management**:
-    *   Add End-Clients (Name, Phone Number).
-    *   Link Projects to End-Clients (One-to-Many).
-*   [ ] **Settings**: Configure automated message templates.
+### Super Admin (System Owner)
+*   **Platform**: Desktop Web Dashboard.
+*   **Capabilities**: View total active tenants, API usage metrics (Gemini/WhatsApp), system error logs, and disable/suspend accounts.
+*   **Dashboard**: View total active tenants, API usage metrics, and system error logs.
+*   **Management**: Ability to disable/suspend a Professional account.
+*   **Global Config**: Manage API keys (WhatsApp, Gemini).
 
-### End-Client
-*   [ ] **Passive Interaction**: Does not log in. Receives WhatsApp updates.
-*   [ ] **content**: "Your project [ID] has moved to status [STATUS]. Summary: [AI_SUMMARY]."
+### Professional (The Subscriber - Mobile User)
+*   **Platform**: **Mobile PWA** (Optimized for Phone).
+*   **Capabilities**:
+    *   **Voice Workflow**: Instantly create records by speaking.
+    *   **Project Management**: Add/Edit Projects, Clients, and view status.
+        *   **Add Projects**: Voice Input or Manual ID Entry.
+        *   **Manage Projects**: View "My Projects" list with real-time status. Manual "Refresh" trigger.
+        *   **Manage Clients**: Add End-Clients (Name, Phone) and link to projects.
+    *   **Reviewer**: Validate scraped data and approve WhatsApp drafts.
+    *   **Searcher**: Access E-Library for documents/GIS records.
 
-## 2. Core Modules
+### End-Client (Passive Receiver)
+*   **Platform**: None (WhatsApp Only).
+*   **Interaction**: Receives updates only after Professional approval.
 
-### A. Data Integration Layer
-*   **API Client**:
-    *   [ ] Implement rate-limited client for `JSON-based 3rd Party Provider`.
-    *   [ ] Map external JSON fields to internal `Project` schema.
+## 3. Core Modules & Logic
+
+### A. Data Integration & AI Layer
 *   **Web Scraper (Playwright)**:
-    *   [ ] `Input`: Government Portal URL + Record ID.
-    *   [ ] `Action`: Navigate, Solve Captcha (if present), Scrape Table Data, Download PDFs.
-    *   [ ] `Output`: Structured JSON + PDF Files.
-    *   [ ] **Constraint**: Must handle network timeouts and retries gracefully.
+    *   Targets: Two distinct Government Web Portals.
+    *   Actions: Navigate, Solve Captcha, Scrape Table Data, Download PDFs.
+    *   **Conflict Logic**: Compare `Portal Data` vs `User Manual Data`. Prioritize distinct recent updates.
+    *   **Predefined Rules**:
+        1.  **Freshness**: If Portal Date > Local Date -> Update Record.
+        2.  **Status Change**: If `Status` changes (e.g., Pending -> Approved) -> Trigger Alert.
+        3.  **New Record**: If new ID found -> Create Record.
+*   **AI Voice Engine**:
+    *   **Input**: Mobile Voice Note (Supports Mixed Language/Hinglish).
+        *   *Note*: Model handles language switching automatically.
+    *   **Process**: Transcribe (Whisper) -> Extract Data (Gemini JSON).
+    *   **Output Data**: Structured JSON used to **Pre-fill the "Add Project" Form**.
+        *   Example: `{ "client_name": "Ramesh", "survey_number": "123", "village": "Rampur" }`.
+    *   **Action**: User reviews the pre-filled form and clicks "Save" to commit to DB.
 
 ### B. The "Daily Brief" Engine
-*   **Scheduler**:
-    *   [ ] Cron job set for 06:00 AM Local Time.
-*   **Change Detection Logic**:
-    *   [ ] Fetch current state from DB (`old_state`).
-    *   [ ] Fetch new state from Scraper/API (`new_state`).
-    *   [ ] Compare fields. If different -> Trigger `Event: UpdateDetected`.
+*   **Scheduler**: Cron job at 06:00 AM Local Time.
+*   **Change Detection**: Compare `new_scrape` vs `old_db_state`.
+*   **Trigger**: If change detected -> Queue Draft Notification.
 
-### C. AI Summary Module
-*   **Input**: PDF Document (buffer/stream) or lengthy text description.
-*   **Process**:
-    *   [ ] Send to Google Gemini API with prompt: *"Summarize this technical status update into 3 bullet points for a non-technical client."*
-*   **Output**: Clean text string.
-
-### D. Notification Pipeline
+### C. Managed Notification Bridge (Drafts Queue)
+*   **Workflow**:
+    *   System generates "Draft Message".
+    *   **Dashboard/App**: Shows "Pending Approvals".
+    *   User Actions: `Approve` (Send), `Edit` (Modify Text), `Delete` (Discard).
 *   **Channel**: WhatsApp Business API.
-*   **Logic**:
-    *   [ ] Queue notification when `Event: UpdateDetected` occurs.
-    *   [ ] Check `Professional.subscription_status` before sending.
-    *   [ ] Replace placeholders in template: `Hello {client_name}, Update on {project_id}...`
-    *   [ ] **Security**: Encrypt PII (Phone Numbers) in logs. Do not log message body if it contains sensitive info.
+*   **AI Summary**: PDF Docs -> Gemini -> 3-bullet summary included in draft.
 
-## 3. Non-Functional Requirements
-*   **Latency**: Dashboard load time < 2s.
-*   **Throughput**: "Daily Brief" must process 1,000 records within 1 hour (Requires ~17 records/min processing speed).
-*   **Reliability**: 99.9% uptime for the Dashboard.
-*   **Security**: 
-    *   Fernet Encryption for Client Phones.
-    *   HTTPS everywhere.
-    *   Secure HTTP-only cookies for Auth tokens.
+### D. Knowledge Repository (E-Library)
+*   **Content**: PDF and Text documents.
+*   **Features**:
+    *   **Fast Search**: Full-text search engine (Postgres `tsvector`).
+    *   **Filtering**: By Category, Tags, Year.
+    *   **GIS/ID Integration**: Specific search for Government Record IDs.
+
+## 4. Non-Functional Requirements
+*   **Database Strategy**:
+    *   **Development**: Localhost (Docker).
+    *   **Production**: Cloud Managed Database (AWS RDS / DigitalOcean) for 24/7 availability.
+*   **Mobile Experience**: **Mobile-First Web App (PWA)** using React.
+*   **Data Security**: High-level encryption for Professional's client data (PII).
+*   **Accuracy**: Voice processing must handle Indian accents/mixed-language (Hinglish).

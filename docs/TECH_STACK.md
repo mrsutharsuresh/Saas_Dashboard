@@ -5,29 +5,31 @@ The stack is chosen for **performance** (handling concurrent scraping), **scalab
 
 | Layer | Technology | Rationale |
 | :--- | :--- | :--- |
-| **Frontend** | **React (Vite)** | Industry standard, fast dev server, huge ecosystem of UI components. |
-| **Styling** | **TailwindCSS** | Utility-first CSS allows for rapid UI development and implementing "Premium" aesthetics easily. |
-| **Backend** | **Python (FastAPI)** | <ul style="margin:0"><li>**Async/Await Native**: Crucial for handling 100+ concurrent Playwright browser data streams.</li><li>**Pydantic**: Excellent data validation for untrusted external data sources.</li><li>**Performance**: One of the fastest Python frameworks.</li></ul> |
-| **Database** | **PostgreSQL** | Robust relational model is required for the complex relationships between Tenants (Professionals), End-Clients, and Projects. |
-| **Task Queue** | **Celery + Redis** | The "Daily Brief" requires scheduling robust jobs. Redis acts as the broker. Celery is battle-tested. |
-| **Scraping** | **Playwright (Python)** | Superior to Selenium. Supports modern web features, auto-waiting, and headless execution reliably. |
-| **AI** | **Google Gemini API** | Advanced context window for document summarization. Cost-effective compared to competitors. |
-| **Deployment** | **Docker** | Containerization ensures consistent environments between dev and prod (especially important for Playwright dependencies). |
+| **Frontend** | **React (Vite) + Chakra UI / ShadCN** | Mobile-First Responsive Design (PWA). ShadCN provides accessible, high-quality mobile components. |
+| **Backend** | **Python (FastAPI)** | Async support for AI processing and Scraping. |
+| **Database** | **PostgreSQL (pgvector)** | Relational data + Vector Embeddings for E-Library Search. |
+| **AI Processing** | **Google Gemini 1.5 Flash** | Cost-effective, high-speed LLM for Voice-to-JSON extraction. |
+| **Voice** | **Web Audio API + OpenAI Whisper** | Browser-based recording -> Server-side transcription. |
+| **Task Queue** | **Celery + Redis** | Managing scrape jobs and AI processing pipelines. |
+| **Scraping** | **Playwright (Python)** | Headless browsing for government portals. |
 
 ## Detailed Breakdown
 
-### 1. Backend: FastAPI vs Django
-While Django provides a lot of out-of-the-box features (Admin, ORM), **FastAPI** was chosen because:
-*   The application is heavy on **IO-bound background tasks** (scraping).
-*   We need lightweight, high-throughput endpoints for the dashboard.
-*   We want granular control over the DB queries (using SQLAlchemy or SQLModel) for multi-tenancy optimization.
+### 1. Frontend: Mobile-First PWA
+*   **Why React?**: Huge ecosystem. We will use a "Mobile First" CSS framework (Tailwind) to ensure it acts like an App.
+*   **PWA Features**: Manifest.json for "Add to Home Screen", Service Workers for offline capabilities.
 
-### 2. Frontend: Vite vs Next.js
-We opted for **Vite (SPA)** over Next.js because:
-*   The dashboard is a gated, authenticated app. SEO is not a primary concern.
-*   SPA provides a snappier "app-like" feel.
-*   Simpler deployment (static files served by Nginx/CDN) compared to managing Node.js server runners.
+### 2. Backend: AI & Voice Pipeline
+*   **Voice**: Mobile uploads `.webm` or `.mp3`.
+*   **Processing**:
+    1.  `FastAPI` receives file.
+    2.  `Whisper` (or Gemini) transcodes Speech-to-Text.
+    3.  `Gemini 1.5` parses text to JSON.
+
 
 ### 3. Database: Multi-Tenancy Strategy
 *   **Approach**: **Shared Database, Shared Schema** (most scalable for <10k tenants).
+*   **Hosting**:
+    *   **Dev**: Docker Desktop (Localhost).
+    *   **Prod**: AWS RDS / DigitalOcean Managed DB (Cloud).
 *   **Implementation**: A `tenant_id` column on every major table (`projects`, `clients`, `reports`), indexed and enforced via the ORM service layer.

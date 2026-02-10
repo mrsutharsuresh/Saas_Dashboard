@@ -1,65 +1,54 @@
 # SaaS Dashboard Development Tasks
 
-## Phase 1: Proof of Concept (POC) - The "Vertical Slice"
-- [ ] **Scraper Prototype**
-    - [ ] Set up Python/Playwright environment.
-    - [ ] Implement robust login/nav logic for the target government portal.
-    - [ ] handle CAPTCHA (manual intervention or solver integration for POC).
-    - [ ] Extract raw data for a single record ID.
-- [ ] **Basic API & DB**
-    - [ ] Initialize FastAPI project with PostgreSQL connection.
-    - [ ] Create basic `Project` model.
-    - [ ] Create endpoint to trigger scraper and return JSON.
-- [ ] **Simplified UI**
-    - [ ] Initialize React/Vite project.
-    - [ ] Create a simple input form (Record ID) and result display.
+## Phase 1: Core Scraper & Basic API
+- [ ] **Repo Setup**
+    - [ ] Initialize FastAPI (Backend).
+    - [ ] Initialize React (`mobile-pwa`) with Vite + Tailwind + ShadCN.
+- [ ] **Scraper Core**
+    - [ ] Playwright script for Government Portal 1.
+    - [ ] Extract JSON Data + PDF Download.
+- [ ] **Basic API**
+    - [ ] Endpoint `POST /scrape {id}`.
 
-## Phase 2: MVP Foundation & Multi-Tenancy
-- [ ] **Authentication System**
-    - [ ] Implement JWT Auth (Login, Register, Password Reset).
-    - [ ] Middleware for Tenant Isolation (Row Level Security logic).
-- [ ] **Database Schema Refinement**
-    - [ ] Design comprehensive schemas: `Tenant`, `EndClient`, `Project`, `AuditLog`.
-    - [ ] Run migrations.
-- [ ] **Project Management CRUD**
-    - [ ] API endpoints for Create, Read, Update, Delete Projects.
-    - [ ] UI for "My Projects" grid view.
-
-## Phase 3: The "Daily Brief" Engine (Workers)
-- [ ] **Task Queue Infrastructure**
-    - [ ] Set up Redis and Celery (or ARQ).
-    - [ ] Configure Worker Docker container.
-- [ ] **Change Detection Logic**
-    - [ ] Implement `DiffService` to compare new scrape vs. old DB state.
-    - [ ] Event emission: `UpdateDetected`.
-- [ ] **Scheduler**
-    - [ ] Configure cron for 6:00 AM daily run.
-    - [ ] Implement batching (e.g., process 10 records at a time to respect rate limits).
-
-## Phase 4: Intelligence & Notifications
-- [ ] **AI Summarizer**
-    - [ ] Integrate Google Gemini API.
-    - [ ] Implement prompt engineering for "3-bullet summary".
-    - [ ] Handle PDF text extraction.
-- [ ] **WhatsApp Integration**
-    - [ ] Set up Meta Graph API client.
-    - [ ] Create Message Templates and get approval.
-    - [ ] Implement "Send Notification" worker task.
-
-## Phase 5: Dashboard Polish & Admin
-- [ ] **UI/UX Refinement**
-    - [ ] Implement "Premium" Glassmorphism design system.
-    - [ ] Add loading states, toasts, and error handling.
+## Phase 2: Mobile PWA Foundation (Auth & CRUD)
+- [ ] **Mobile UI Shell**
+    - [ ] Bottom Navigation Layout.
+    - [ ] "Add Record" FAB.
+- [ ] **Auth System**
+    - [ ] Login Screen (JWT).
+    - [ ] Tenant Middleware.
+- [ ] **Project Management**
+    - [ ] API: Create/Read/Update/Delete Projects.
+    - [ ] UI: Forms & Grid View.
 - [ ] **Admin Panel**
-    - [ ] Super-Admin view for system stats (Total Projects, Scraper Success Rate).
-- [ ] **Client Visibility**
-    - [ ] (Optional) Read-only view for end-clients if they click a link.
+    - [ ] System Stats Dashboard.
+- [ ] **Voice Recorder Component**
+    - [ ] Implement `MediaRecorder` API.
+    - [ ] Audio Visualization.
 
-## Phase 6: Production Readiness
-- [ ] **Security Review**
-    - [ ] Audit PII encryption.
-    - [ ] Penetration testing (basic).
-- [ ] **DevOps**
-    - [ ] Docker Compose for production.
-    - [ ] CI/CD pipeline (GitHub Actions).
-    - [ ] Load Testing (Simulate 1000 concurrent tasks).
+## Phase 3: The Intelligence Engine (AI & Drafts)
+- [ ] **Audio Pipeline**
+    - [ ] Whisper integration (STT).
+    - [ ] Gemini extraction (JSON).
+- [ ] **Drafts Queue System**
+    - [ ] DB Schema for `NotificationDraft`.
+    - [ ] "Swipe to Approve" User Interface.
+- [ ] **Daily Brief Scheduler**
+    - [ ] Cron Job (06:00 AM).
+    - [ ] Change Detection Logic.
+
+## Phase 4: E-Library & Search
+- [ ] **Document Ingestion**
+    - [ ] PDF to Text parser.
+- [ ] **Search API**
+    - [ ] Postgres Full-Text Search implementation.
+- [ ] **Mobile Search UI**
+    - [ ] Filter interface (Year, Category).
+
+## Phase 5: Polish & Notification Delivery
+- [ ] **WhatsApp Integration**
+    - [ ] Approve Button -> Meta API connection.
+- [ ] **Offline Support**
+    - [ ] Service Worker configuration.
+- [ ] **Security Audit**
+    - [ ] PII Encryption verification.

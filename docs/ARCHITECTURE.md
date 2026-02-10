@@ -8,9 +8,9 @@ This document outlines the architecture for the Multi-Tenant SaaS Dashboard. The
 ```mermaid
 graph TD
     Client["End-Client / Professional"] -->|HTTPS| CDN["CDN / Frontend Host"]
-    CDN --> ReactApp["React SPA (Vite)"]
+    CDN --> ReactApp["Mobile PWA (React Vite)"]
     
-    ReactApp -->|REST/JSON| API["FastAPI Backend"]
+    ReactApp -->|REST/JSON + Audio| API["FastAPI Backend"]
     
     subgraph "Backend Infrastructure"
         API -->|Read/Write| DB[("PostgreSQL")]
@@ -21,12 +21,13 @@ graph TD
     subgraph "Worker Layer"
         Queue --> Worker["Python Worker"]
         Worker -->|Headless Browser| Scraper["Playwright Engine"]
-        Worker -->|API Call| ExtData["3rd Party Data Provider"]
-        Worker -->|Review| AI["Google Gemini API"]
+        Worker -->|Transcribe| Whisper["Whisper/Gemini"]
+        Worker -->|Extract Data| LLM["Gemini 1.5 Flash"]
     end
     
     subgraph "Notification Layer"
-        Worker -->|Send Msg| WhatsApp["WhatsApp Business API"]
+        Worker -->|Draft Msg| Drafts["Drafts Queue"]
+        Drafts -->|User Approve| WhatsApp["WhatsApp Business API"]
     end
     
     Scraper -->|Target| GovPortal["Regional Gov Portal"]
@@ -34,35 +35,35 @@ graph TD
 
 ## Core Components
 
-### 1. Frontend (The Dashboard)
-*   **Technology**: React (Vite) + TailwindCSS.
+### 1. Frontend (Mobile PWA)
+*   **Technology**: React (Vite) + TailwindCSS + ShadCN/UI.
 *   **Responsibility**: 
-    *   Auth UI (Login/Register).
-    *   Project/Record Management Grid.
-    *   Live Status Updates (via polling or WebSockets).
-    *   Admin Panel for system metrics.
+    *   **Mobile-First Interface**: Bottom navigation, touch-friendly inputs.
+    *   **Project Management**: CRUD Interfaces, Grid/List Views.
+    *   **Admin Panel**: System metrics dashboard.
+    *   **Voice Recorder**: Browser-based audio capture (`MediaRecorder` API).
+    *   **Drafts Manager**: UI for reviewing and approving pending WhatsApp messages.
+    *   **E-Library Search**: Fast, filtered search for documents.
 
 ### 2. Backend API
 *   **Technology**: Python FastAPI.
 *   **Responsibility**:
-    *   User Authentication (JWT).
-    *   Tenant Isolation (Logical separation in DB).
-    *   CRUD operations for Projects.
-    *   Orchestration of "Daily Brief" jobs.
+    *   **User Authentication (JWT)**: Login/Register, Tenant Isolation.
+    *   **CRUD Operations**: Managing Projects, Clients, and Drafts.
+    *   **Audio Upload Endpoint**: Receiver for voice notes.
+    *   **Hybrid Search**: Combining SQL text search + Vector search for the e-library.
 
-### 3. Data Ingestion Layer (The Workers)
-*   **Technology**: Celery (or ARQ) + Playwright.
-*   **Responsibility**:
-    *   **Scraper**: Headless browsing of government portals. Needs to handle captchas, session management, and retries.
-    *   **API Client**: Fetching JSON data from 3rd party providers.
-    *   **Diff Engine**: Comparing new data vs. old stored data to detect "Changes".
+### 3. Intelligence Layer (Voice & Scraper)
+*   **Technology**: Celery + Playwright + Gemini.
+*   **Pipeline**:
+    1.  **Voice**: Audio -> Text (STT) -> JSON (LLM).
+    2.  **Scraper**: Portal Data -> Conflict Check -> Draft Generation.
+    3.  **Conflict Logic**: If Portal Date > Manual Date, auto-update. Else, create "Conflict Alert".
 
-### 4. Intelligence Layer
-*   **Technology**: Google Gemini API.
-*   **Responsibility**:
-    *   Receiving raw text/PDF content.
-    *   Generating "3-bullet summaries".
-    *   Sentiment analysis (optional/future).
+### 4. Notification Bridge
+*   **Logic**: "Human-in-the-Loop".
+*   **Drafts Queue**: Intermediate state in DB. No message leaves without `status='APPROVED'`.
+
 
 ### 5. Notification Service
 *   **Technology**: Twilio / Meta Graph API.
@@ -75,6 +76,11 @@ graph TD
 *   **Secrets**: No hardcoding. All keys (API_KEY, DB_URL) loaded via `.env` and injected at runtime.
 *   **Tenant Isolation**: Implementation of Row-Level Security (RLS) or rigorous ORM filtering to ensure Professionals only see their own clients.
 
-## Scalability Strategy
-*   **Horizontal Scaling**: The *Worker* nodes are stateless. We can spin up 10+ worker containers to handle 1,000+ simultaneous scraping requests at 6:00 AM.
-*   **Rate Limiting**: Implementation of mapped delays to avoid IP bans from valid government portals.
+## Scalability & Database Strategy
+*   **Horizontal Scaling**: The *Worker* nodes are stateless. We can spin up 10+ worker containers.
+*   **Database Hosting**:
+    *   **Development**: Local Docker Container (`postgres:15-alpine`).
+    *   **Production**: Managed Cloud Database (e.g., AWS RDS, DigitalOcean Managed Postgres) to ensure 99.9% uptime and automated backups.
+    *   **Why Cloud?**: The "Daily Brief" scheduler runs at 6:00 AM. A local laptop might be off. Cloud storage ensures the system works while you sleep.
+*   **Rate Limiting**: Implementation of mapped delays to avoid IP bans.
+

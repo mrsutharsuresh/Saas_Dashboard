@@ -1,82 +1,69 @@
-# Project Development Plan & Roadmap
+# Project Development Plan & Roadmap (Mobile PWA + AI + SaaS)
 
-## Overview
-This document breaks down the development of the SaaS Dashboard into distinct, verifiable phases. The goal is to reach a "Proof of Concept" (POC) quickly to validate the core value proposition (Scraping + Updates), followed by a robust MVP build.
-
----
-
-## Phase 1: Proof of Concept (POC) - The "Vertical Slice"
+## Phase 1: Core Scraper & Basic API
 **Goal**: Validate we can scrape the target portal, extract data, and display it.
 **Timeline**: Week 1-2
 
 ### Tasks
-1.  **Repo Setup**: Initialize FastAPI (Backend) and React/Vite (Frontend).
-2.  **Scraper Core**: Write the Python Playwright script to login and scrape *one* specific record from the Government Portal.
-    *   *Verifiable Output*: A script that outputs JSON + PDFs for a given ID.
-3.  **Basic API**: Create an endpoint `POST /scrape {id}` that triggers the script and returns the result.
-4.  **Minimal UI**: A single page app where you input an ID and see the Scraped Data + Link to PDF.
+1.  **Repo Setup**: Initialize FastAPI (Backend) and React `mobile-pwa` (Frontend).
+2.  **Scraper Core**: Playwright script for Government Portal 1.
+    *   *Output*: JSON Data + PDF Download.
+3.  **Basic API**: Endpoint `POST /scrape {id}`.
 
----
-
-## Phase 2: MVP Foundation & Multi-Tenancy
-**Goal**: Turn the POC into a real SaaS linking Professionals to Projects.
-**Timeline**: Week 3-4
+## Phase 2: Mobile PWA Foundation (Auth & CRUD)
+**Goal**: A usable mobile app for the Professional + basic Admin tools.
+**Timeline**: Week 3
 
 ### Tasks
-1.  **Auth System**: Implement JWT Authentication.
-    *   *Roles*: Super Admin, Professional.
-2.  **Database Design**:
-    *   Implement `Tenants` (Professionals).
-    *   Implement `Projects` (The records being tracked).
-    *   Implement `EndClients` (The people receiving updates).
-3.  **CRUD Dashboard**: A "Grid View" for Professionals to see all their tracked projects.
+1.  **Mobile UI Shell**: Bottom Navigation, "Add Record" FAB, "My Projects" List.
+2.  **Auth System**: Login (JWT), Pin Code, Tenant Middleware.
+3.  **Project Management**:
+    *   API: Create/Read/Update/Delete Projects & Clients.
+    *   UI: Forms for manual entry and list views.
+    *   Conflict Logic: Compare new manual data vs old scraped data.
+4.  **Admin Panel**: Basic view for System Stats (Total Users/Projects).
+5.  **Voice Recorder Component**:
+    *   Implement `MediaRecorder` API in React.
+    *   Visualizer for audio input.
+    *   Upload to Backend -> Save to Disk.
 
----
-
-## Phase 3: The "Daily Brief" Engine
-**Goal**: Automate the checking process at scale.
-**Timeline**: Week 5
+## Phase 3: The Intelligence Engine (AI & Drafts)
+**Goal**: Process voice notes into data, automate scrapes, and manage notifications.
+**Timeline**: Week 4-5
 
 ### Tasks
-1.  **Task Queue**: Set up Celery + Redis.
-2.  **Scheduler**: Configure the 06:00 AM Cron Job.
-3.  **Diff Logic**: Implement the "Change Detector".
-    *   *Logic*: `if new_status != old_status: mark_as_changed()`.
-4.  **Worker Scaling**: Ensure we can run 50+ scrapes in parallel without crashing.
+1.  **Audio Pipeline**: Connect Whisper (STT) + Gemini (Extraction).
+2.  **Daily Brief Scheduler**: Cron Job (06:00 AM) to run scrapers.
+3.  **Drafts Queue System**:
+    *   DB Schema for `NotificationDraft` (Pending/Approved/Rejected).
+    *   UI for Professional to "Swipe to Approve".
+4.  **AI Summary**: Generate 3-bullet summary from Scraped PDFs.
 
----
-
-## Phase 4: Intelligence & Notifications
-**Goal**: Close the loop with the End-Client.
+## Phase 4: E-Library & Search
+**Goal**: Manage documents.
 **Timeline**: Week 6
 
 ### Tasks
-1.  **AI Summary**: Send scraped PDF text to Google Gemini -> Get 3-bullet summary.
-2.  **WhatsApp API**: Connect Meta Graph API.
-3.  **Pipeline**:
-    *   *Trigger*: Change Detected.
-    *   *Action*: Generate Summary -> Format WhatsApp Msg -> Send.
+1.  **Document Ingestion**: Parse PDFs to text.
+2.  **Search API**: Implement Full-Text Search (Postgres `tsvector`).
+3.  **Mobile Search UI**: Filters for Year, Category, ID.
 
----
-
-## Phase 5: Polish & Launch Readiness
-**Goal**: Make it look and feel like a premium SaaS.
+## Phase 5: Polish & Notification Delivery
+**Goal**: Production ready.
 **Timeline**: Week 7
 
 ### Tasks
-1.  **UI Polish**: Apply "Glassmorphism" design, loading skeletons, and responsive mobile view.
-2.  **Security Audit**: Verify PII encryption.
-3.  **Deployment**: Dockerize everything (Web, Worker, DB, Redis) and deploy to Staging.
-
----
+1.  **WhatsApp Integration**: Hook up "Approve" button to Meta API.
+2.  **Offline Support**: Service Workers for PWA capabilities.
+3.  **Security Audit**: Verify detailed PII encryption.
 
 ## Summary Roadmap
 
 | Phase | Duration | Key Deliverable |
 | :--- | :--- | :--- |
-| **1. POC** | 2 Weeks | Working Scraper + Raw Data JSON |
-| **2. MVP Core** | 2 Weeks | User Login + Project List |
-| **3. Automation** | 1 Week | Daily Auto-Updates working |
-| **4. AI + Notif** | 1 Week | WhatsApp messages flowing |
-| **5. Polish** | 1 Week | Production-ready Design |
-| **Total** | **~7 Weeks** | **Version 1.0 Launch** |
+| **1. POC** | 2 Weeks | Scraper + API |
+| **2. MVP Core** | 2 Weeks | Mobile App + Admin + CRUD |
+| **3. Intelligence** | 2 Week | Voice AI + Daily Brief |
+| **4. E-Library** | 1 Week | Searchable Docs |
+| **5. Polish** | 1 Week | WhatsApp + Offline + Sec |
+| **Total** | **~8 Weeks** | **Version 1.0 Launch** |
