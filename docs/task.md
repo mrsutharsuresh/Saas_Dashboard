@@ -1,54 +1,36 @@
 # SaaS Dashboard Development Tasks
 
-## Phase 1: Core Scraper & Basic API
-- [/] **Repo Setup**
-    - [x] Initialize FastAPI (Backend).
-    - [x] Initialize React (`mobile-pwa`) with Vite + Tailwind + ShadCN.
-- [ ] **Scraper Core**
-    - [ ] Playwright script for Government Portal 1.
-    - [ ] Extract JSON Data + PDF Download.
-- [x] **Basic API**
-    - [x] Endpoint `POST /scrape {id}`.
+## Phase 1: Data Acquisition (Scrapers)
+- [ ] **Portal Scraper Core**
+    - [x] Base Scraper Engine (Stealth + Retry).
+    - [ ] Portal 1 Script (Blocked on URL).
+    - [ ] Portal 2 Script (Blocked on URL).
 
-## Phase 2: Mobile PWA Foundation (Auth & CRUD)
-- [ ] **Mobile UI Shell**
-    - [ ] Bottom Navigation Layout.
-    - [ ] "Add Record" FAB.
-- [ ] **Auth System**
-    - [ ] Login Screen (JWT).
-    - [ ] Tenant Middleware.
-- [ ] **Project Management**
-    - [ ] API: Create/Read/Update/Delete Projects.
-    - [ ] UI: Forms & Grid View.
-- [ ] **Admin Panel**
-    - [ ] System Stats Dashboard.
-- [ ] **Voice Recorder Component**
-    - [ ] Implement `MediaRecorder` API.
-    - [ ] Audio Visualization.
+## Phase 2: Core Backend & API
+- [/] **System Architecture**
+    - [x] Database Models (User, Project, Client).
+    - [x] Auth API (JWT, Register, Login).
+    - [x] Project CRUD API.
+    - [ ] Celery Task Queue Setup.
 
-## Phase 3: The Intelligence Engine (AI & Drafts)
-- [ ] **Audio Pipeline**
-    - [ ] Whisper integration (STT).
-    - [ ] Gemini extraction (JSON).
-- [ ] **Drafts Queue System**
-    - [ ] DB Schema for `NotificationDraft`.
-    - [ ] "Swipe to Approve" User Interface.
-- [ ] **Daily Brief Scheduler**
-    - [ ] Cron Job (06:00 AM).
-    - [ ] Change Detection Logic.
+## Phase 3: AI Intelligence Layer
+- [ ] **Voice Pipeline**
+    - [ ] Whisper Integration (Audio -> Text).
+    - [ ] Gemini Extract Logic (Text -> JSON).
+- [ ] **RAG Engine**
+    - [ ] PDF Parsing.
+    - [ ] Vector Search Basic.
 
-## Phase 4: E-Library & Search
-- [ ] **Document Ingestion**
-    - [ ] PDF to Text parser.
-- [ ] **Search API**
-    - [ ] Postgres Full-Text Search implementation.
-- [ ] **Mobile Search UI**
-    - [ ] Filter interface (Year, Category).
+## Phase 4: Frontend (Mobile PWA)
+- [/] **Core UI**
+    - [x] Vite + Tailwind Setup.
+    - [x] Auth Context & Private Routes.
+    - [x] Login & Register Screens.
+    - [x] Dashboard & Project List.
+    - [ ] Audio Recorder Component.
 
-## Phase 5: Polish & Notification Delivery
-- [ ] **WhatsApp Integration**
-    - [ ] Approve Button -> Meta API connection.
-- [ ] **Offline Support**
-    - [ ] Service Worker configuration.
-- [ ] **Security Audit**
-    - [ ] PII Encryption verification.
+## Phase 5: Deployment & QA
+- [ ] **Infrastructure**
+    - [ ] Docker Compose Setup.
+    - [ ] Nginx Reverse Proxy.
+    - [ ] CI/CD Pipeline.

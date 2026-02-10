@@ -57,14 +57,15 @@
 2.  **Offline Support**: Service Workers for PWA capabilities.
 3.  **Security Audit**: Verify detailed PII encryption.
 
-## Summary Roadmap (Relaxed Schedule)
+## Summary Roadmap (Detailed Schedule)
 
 | Phase | Duration | Key Deliverable |
 | :--- | :--- | :--- |
-| **1. POC** | 3 Weeks | Scraper + API (Focus on Reliability) |
-| **2. MVP Core** | 3 Weeks | Mobile App + Admin + CRUD |
-| **3. Intelligence** | 3 Weeks | Voice AI + Daily Brief + RAG Setup |
-| **4. E-Library** | 2 Weeks | Searchable Docs + Optimization |
-| **5. Polish & Deploy** | 3 Weeks | WhatsApp + Security + Cloud Setup |
-| **Total** | **~14 Weeks** | **Version 1.0 Launch** |
+| **1. Scrapers** | 3 Weeks | Robust Portal Automations (Portals 1 & 2). |
+| **2. Backend** | 2 Weeks | Secure API + Tenant DB Architecture. |
+| **3. AI Core** | 3 Weeks | Voice Pipeline + Hinglish Tuning. |
+| **4. Frontend** | 3 Weeks | Mobile PWA UI + Offline Config. |
+| **5. E-Library** | 2 Weeks | RAG Search + PDF Processing. |
+| **6. Deploy/QA** | 3 Weeks | Cloud Setup + UAT + Buffer. |
+| **Total** | **~16 Weeks** | **Production Release** |
 
