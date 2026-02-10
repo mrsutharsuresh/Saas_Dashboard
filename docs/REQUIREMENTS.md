@@ -74,3 +74,13 @@ A specialized B2B SaaS platform designed to bridge data gaps between government 
 *   **Mobile Experience**: **Mobile-First Web App (PWA)** using React.
 *   **Data Security**: High-level encryption for Professional's client data (PII).
 *   **Accuracy**: Voice processing must handle Indian accents/mixed-language (Hinglish).
+*   **Hardware Requirements**:
+    *   **CPU**: 2+ vCPUs (t3.medium / DigitalOcean Droplet) for handling concurrent browser automation.
+    *   **RAM**: 4GB - 8GB RAM minimum (Playwright is memory intensive).
+    *   **Storage**: 50GB NVMe SSD (for logs/temp files).
+*   **Risk Mitigation**:
+    *   **Captchas**: Integration with **2Captcha** or similar solving service.
+    *   **Rate Limiting**: Intelligent delays and **Residential Proxy Rotation** to prevent IP bans.
+    *   **Storage**: Hybrid approach. Structured data in Postgres, Unstructured files (PDFs) in **S3 Compatibility Storage** (AWS/DigitalOcean Spaces).
+    *   **AI Fallback**: Using **OpenAI Whisper (API)** for best-in-class Hinglish accuracy over local models.
+

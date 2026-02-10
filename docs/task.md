@@ -1,14 +1,14 @@
 # SaaS Dashboard Development Tasks
 
 ## Phase 1: Core Scraper & Basic API
-- [ ] **Repo Setup**
-    - [ ] Initialize FastAPI (Backend).
-    - [ ] Initialize React (`mobile-pwa`) with Vite + Tailwind + ShadCN.
+- [/] **Repo Setup**
+    - [x] Initialize FastAPI (Backend).
+    - [x] Initialize React (`mobile-pwa`) with Vite + Tailwind + ShadCN.
 - [ ] **Scraper Core**
     - [ ] Playwright script for Government Portal 1.
     - [ ] Extract JSON Data + PDF Download.
-- [ ] **Basic API**
-    - [ ] Endpoint `POST /scrape {id}`.
+- [x] **Basic API**
+    - [x] Endpoint `POST /scrape {id}`.
 
 ## Phase 2: Mobile PWA Foundation (Auth & CRUD)
 - [ ] **Mobile UI Shell**
