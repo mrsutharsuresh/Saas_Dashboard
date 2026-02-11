@@ -1,10 +1,10 @@
 # Comprehensive Project Cost & Roadmap Analysis (Bottom-Up Estimation)
 
-## 1. Executive Summary (Revised)
+## 1. Executive Summary (Revised with Extended POC)
 *   **Total Project Estimates**:
-    *   **Effort**: ~340 Hours.
-    *   **Timeline**: **16 Weeks** (4 Months) @ 20-25 hrs/week (Realistic Freelance Pace).
-    *   **Development Cost**: **₹2,10,000 - ₹2,50,000** (Based on hourly breakdown).
+    *   **Effort**: ~380 Hours.
+    *   **Timeline**: **18 Weeks** (4.5 Months) including 1-Month POC.
+    *   **Development Cost**: **₹2,50,000 - ₹2,80,000** (Full Scope).
 
 ---
 
@@ -16,17 +16,29 @@
 *   **AI/Complex Logic**: ₹1,000/hr.
 *   **DevOps/System Arch**: ₹800/hr.
 
-### Phase 1: Data Acquisition (The Scrapers)
-*Target: 2 Govt Portals + Base Engine*
+### Phase 0: Extended POC + LLM
+*Target: Feasibility Demo + Basic AI Cleaning*
 
 | Sub-Task | Description | Complexity | Hours | Rate (₹) | Est. Cost (₹) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Engine Core** | Proxy rotation, Retry logic, Captcha handler placeholders. | High | 15 | 800 | 12,000 |
-| **Portal 1 Scraper** | Auth (Captcha), Nav, Table Extraction, PDF Download logic. | High | 25 | 600 | 15,000 |
-| **Portal 2 Scraper** | Auth (Captcha), Nav, Table Extraction, PDF Download logic. | High | 25 | 600 | 15,000 |
-| **Data Normalization**| Cleaning distinct outputs into a single schema. | Med | 10 | 600 | 6,000 |
-| **Unit Testing** | Validating scrapers against changing layouts. | Med | 10 | 600 | 6,000 |
-| **Phase 1 Total** | | | **85 Hrs** | | **₹54,000** |
+| **Setup & Analysis** | Repo, Env, Network Analysis. | Med | 8 | 600 | 4,800 |
+| **Portal 1 Script** | Nav + Captcha (Manual/Simple). | High | 15 | 600 | 9,000 |
+| **LLM Integration** | Gemini API Setup + Parsing Prompts. | High | 18 | 800 | 14,400 |
+| **Output Gen** | Unified JSON Output. | Med | 5 | 800 | 4,000 |
+| **POC Total** | | | **54 Hrs** | | **₹35,000** |
+
+### Phase 1: Full Scraper Suite (Post-POC)
+*Target: Portal 2 + Hardening Portal 1*
+
+| Sub-Task | Description | Complexity | Hours | Rate (₹) | Est. Cost (₹) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Portal 1 Polish** | Refactoring POC code for Production. | Med | 10 | 600 | 6,000 |
+| **Portal 2 Scraper** | Full Automation for 2nd Site. | High | 25 | 600 | 15,000 |
+| **Engine Hardening** | Proxies, Captcha API, Retries. | High | 10 | 800 | 8,000 |
+| **Data Pipeline** | Merging schemas, downloading PDFs. | Med | 15 | 600 | 9,000 |
+| **Validation** | Automated data quality checks. | Med | 5 | 600 | 3,000 |
+| **Testing** | Validation against multiple records. | Med | 7 | 600 | 4,200 |
+| **Phase 1 Total** | | | **72 Hrs** | | **₹45,200** |
 
 ### Phase 2: Core Backend & API
 *Target: System Architecture, Database, Auth*

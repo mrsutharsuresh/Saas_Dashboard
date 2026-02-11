@@ -5,30 +5,42 @@
 
 ---
 
-## Phase 1: Data Acquisition & Scraper Engine (Weeks 1-4)
-*Focus: Reliability over Speed. Handling Captchas and Government Portal quirks.*
+## Phase 0: Extended POC + LLM (Weeks 1-4)
+*Goal: Deep Dive Feasibility (Portal 1) + Basic AI Processing.*
 
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1.1** | **Scraper Architecture** | Setup Playwright + Stealth Headers | Standalone | None | 10 |
-| | | Implement Global Retry Logic | Linked | 1.1 | 5 |
-| | | Integrate 2Captcha/CapSolver API | Linked | 1.1 | 8 |
-| **1.2** | **Portal 1 Automation** | Analyze Network Traffic & Auth | Standalone | 1.1 | 8 |
-| | | Script Navigation & Form Filling | Linked | 1.2 | 12 |
-| | | **Data Extraction** (Table -> JSON) | Linked | 1.2 | 8 |
-| | | PDF Download & File Naming | Linked | 1.2 | 5 |
-| **1.3** | **Portal 2 Automation** | Analyze Network Traffic & Auth | Standalone | 1.1 | 8 |
-| | | Script Navigation & Form Filling | Linked | 1.3 | 12 |
-| | | **Data Extraction** (Table -> JSON) | Linked | 1.3 | 8 |
-| | | PDF Download & File Naming | Linked | 1.3 | 5 |
-| **1.4** | **Data Pipeline** | Normalize Data (Schema Unification) | Linked | 1.2, 1.3 | 10 |
-| | | Validation Scripts (Check for empties) | Linked | 1.4 | 5 |
+| **0.1** | **Setup & Analysis** | Repo Setup + Network Analysis (Portal 1) | Standalone | None | 8 |
+| **0.2** | **Portal 1 Script** | Navigation + Captcha Handling (Manual/Simple) | Linked | 0.1 | 15 |
+| **0.3** | **Data Extraction** | HTML Table to JSON Parsing | Linked | 0.2 | 8 |
+| **0.4** | **Basic LLM Setup** | Integrate Gemini API (Flash Model) | Linked | 0.1 | 6 |
+| **0.5** | **AI Data Cleaning** | **Evaluate LLM for parsing messy addresses/names** | Linked | 0.4, 0.3 | 12 |
+| **0.6** | **Demo Output** | Unified JSON + AI Summary Field | Linked | 0.5 | 5 |
 
-**Phase 1 Total**: ~104 Hours (Allocated over 4 Weeks)
+**POC Total**: ~54 Hours (Allocated over 4 Weeks)
+**POC Cost**: **₹35,000** (Fixed)
 
 ---
 
-## Phase 2: Backend Core & Database (Weeks 5-7)
+## Phase 1: Full Data Acquisition Scrapers (Weeks 5-6)
+*Focus: Scaling to Portal 2, automating Captchas, and hardening Portal 1 for production.*
+
+| Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **1.1** | **Scraper Engine** | Global Retry Logic + Proxy Rotation | Standalone | 0.2 | 10 |
+| **1.2** | **Portal 1 Polish** | Refactors for stability (PDFs, Error Handling) | Linked | 0.2 | 10 |
+| **1.3** | **Portal 2 Automation** | Analyze + Script Navigation | Standalone | 1.1 | 20 |
+| | | **Data Extraction** (Table -> JSON) | Linked | 1.3 | 8 |
+| | | PDF Download & Storage Logic | Linked | 1.3 | 5 |
+| **1.4** | **Data Pipeline** | Normalize Data (Schema Unification) | Linked | 0.3, 1.3 | 8 |
+| | | **Validation Scripts** (Null checks, Type alerts) | Linked | 1.4 | 5 |
+| **1.5** | **Hardening** | Integrate 2Captcha API for both Portals | Linked | 1.1 | 6 |
+
+**Phase 1 Total**: ~72 Hours (Allocated over 2 Weeks)
+
+---
+
+## Phase 2: Backend Core & Database (Weeks 7-9)
 *Focus: Security, Tenant Isolation, and API Structure.*
 
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
@@ -47,7 +59,7 @@
 
 ---
 
-## Phase 3: AI Intelligence Layer (Weeks 8-10)
+## Phase 3: AI Intelligence Layer (Weeks 10-12)
 *Focus: High Accuracy Voice Processing & Document RAG.*
 
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
@@ -65,7 +77,7 @@
 
 ---
 
-## Phase 4: Frontend Mobile PWA (Weeks 11-14)
+## Phase 4: Frontend Mobile PWA (Weeks 13-16)
 *Focus: User Experience, Offline Mode, Responsiveness.*
 
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
@@ -84,7 +96,7 @@
 
 ---
 
-## Phase 5: QA, Deployment & Handoff (Weeks 15-16+)
+## Phase 5: QA, Deployment & Handoff (Weeks 17-18+)
 *Focus: Stability and Documentation.*
 
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
