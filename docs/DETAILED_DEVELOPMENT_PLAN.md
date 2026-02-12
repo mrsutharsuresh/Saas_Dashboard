@@ -1,110 +1,100 @@
-# Detailed Development Plan & Timeline (Indian Market - Relaxed)
+# Legal SaaS Development Plan (Pan-India Scope)
 
-**Total Estimated Duration**: 16-18 Weeks (4 - 4.5 Months)
-**Work Mode**: Freelance / Contract (Part-time or Relaxed Full-time)
-
----
-
-## Phase 0: Extended POC + LLM (Weeks 1-4)
-*Goal: Deep Dive Feasibility (Portal 1) + Basic AI Processing.*
-
-| Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **0.1** | **Setup & Analysis** | Repo Setup + Network Analysis (Portal 1) | Standalone | None | 8 |
-| **0.2** | **Portal 1 Script** | Navigation + Captcha Handling (Manual/Simple) | Linked | 0.1 | 15 |
-| **0.3** | **Data Extraction** | HTML Table to JSON Parsing | Linked | 0.2 | 8 |
-| **0.4** | **Basic LLM Setup** | Integrate Gemini API (Flash Model) | Linked | 0.1 | 6 |
-| **0.5** | **AI Data Cleaning** | **Evaluate LLM for parsing messy addresses/names** | Linked | 0.4, 0.3 | 12 |
-| **0.6** | **Demo Output** | Unified JSON + AI Summary Field | Linked | 0.5 | 5 |
-
-**POC Total**: ~54 Hours (Allocated over 4 Weeks)
-**POC Cost**: **₹35,000** (Fixed)
+**Total Estimated Duration**: 18-20 Weeks (4.5 - 5 Months)
+**Strategy**: Broad POC first (Phase 0), then Deep Dive into Universal Engine (Phase 1).
 
 ---
 
-## Phase 1: Full Data Acquisition Scrapers (Weeks 5-6)
-*Focus: Scaling to Portal 2, automating Captchas, and hardening Portal 1 for production.*
+## Phase 0: Expanded POC - Feasibility Across All Portals (Weeks 1-4)
+*Goal: Prove basic connectivity with ALL target systems (Breadth-First).*
 
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1.1** | **Scraper Engine** | Global Retry Logic + Proxy Rotation | Standalone | 0.2 | 10 |
-| **1.2** | **Portal 1 Polish** | Refactors for stability (PDFs, Error Handling) | Linked | 0.2 | 10 |
-| **1.3** | **Portal 2 Automation** | Analyze + Script Navigation | Standalone | 1.1 | 20 |
-| | | **Data Extraction** (Table -> JSON) | Linked | 1.3 | 8 |
-| | | PDF Download & Storage Logic | Linked | 1.3 | 5 |
-| **1.4** | **Data Pipeline** | Normalize Data (Schema Unification) | Linked | 0.3, 1.3 | 8 |
-| | | **Validation Scripts** (Null checks, Type alerts) | Linked | 1.4 | 5 |
-| **1.5** | **Hardening** | Integrate 2Captcha API for both Portals | Linked | 1.1 | 6 |
+| **0.1** | **Setup** | Repo, Env, API Keys (OpenAI, 2Captcha, IndianKanoon) | Standalone | None | 8 |
+| **0.2** | **eCourts Test** | Script to fetch 1 Case Status from `services.ecourts` | Linked | 0.1 | 5 |
+| **0.3** | **High Court Test**| Script to poll `hcraj.nic.in` Display Board (10 mins) | Linked | 0.1 | 8 |
+| **0.4** | **Revenue/Land** | Script to fetch status from `gcms` & `apnakhata` (Basic) | Linked | 0.1 | 8 |
+| **0.5** | **Whatsapp Test** | Send "Hello World" Template via Twilio/Meta Sandbox | Linked | 0.1 | 4 |
+| **0.6** | **Voice Test** | Transcribe 1 sample Audio -> JSON via Whisper | Linked | 0.1 | 4 |
+| **0.7** | **Legacy API** | Fetch 1 Judgment from Indian Kanoon API | Linked | 0.1 | 3 |
+| **0.8** | **Integration** | Combine 0.3 + 0.5 (Live Alert Demo) | Linked | 0.3, 0.5 | 5 |
 
-**Phase 1 Total**: ~72 Hours (Allocated over 2 Weeks)
+**POC Total**: ~45 Hours (Weeks 1-4)
 
 ---
 
-## Phase 2: Backend Core & Database (Weeks 7-9)
-*Focus: Security, Tenant Isolation, and API Structure.*
+## Phase 1: Universal Scraper Engine (Weeks 5-8)
+*Focus: Robust, Abstract Engine with Multi-State Adapters.*
 
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **2.1** | **Database Design** | Schema Design (ER Diagram) | Standalone | None | 8 |
-| | | Migration Setup (Alembic) | Linked | 2.1 | 4 |
-| **2.2** | **Auth System** | User Model & Password Hashing | Standalone | 2.1 | 6 |
-| | | JWT Token Implementation | Linked | 2.2 | 6 |
-| | | Role Based Access (Admin vs Pro) | Linked | 2.2 | 8 |
-| **2.3** | **Core APIs** | Project CRUD (Create/Read/Upd/Del) | Linked | 2.1 | 12 |
-| | | Client CRUD | Linked | 2.1 | 8 |
-| | | Scraper Trigger API (Async Task) | Linked | 1.4, 2.3 | 10 |
-| **2.4** | **Infrastructure** | Redis + Celery Setup (Queue) | Linked | 2.3 | 12 |
+| **1.1** | **Core Engine** | `BaseScraper` Class + `StateAdapter` Pattern | Standalone | 0.2 | 15 |
+| **1.2** | **Proxy Manager** | Rotating Residential IPs + User-Agent Spoofing | Linked | 1.1 | 10 |
+| **1.3** | **eCourts Adapter** | Production-grade District Court Scraper | Linked | 1.1 | 20 |
+| **1.4** | **State Adapter 1** | Rajasthan (HC + Revenue + Land) - Full Implementation | Linked | 1.1 | 15 |
+| **1.5** | **State Adapter 2** | Delhi (HC + District) - Full Implementation | Linked | 1.1 | 10 |
 
-**Phase 2 Total**: ~74 Hours (Allocated over 3 Weeks)
+**Phase 1 Total**: ~70 Hours (Weeks 5-8)
 
 ---
 
-## Phase 3: AI Intelligence Layer (Weeks 10-12)
-*Focus: High Accuracy Voice Processing & Document RAG.*
+## Phase 2: Backend Architecture & User Mgmt (Weeks 9-11)
+*Focus: Scalable Monolith.*
 
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **3.1** | **Voice Pipeline** | Audio Upload API (Blob storage) | Standalone | 2.3 | 8 |
-| | | OpenAI Whisper Integration | Linked | 3.1 | 6 |
-| | | **Hinglish Optimization** (Prompting) | Linked | 3.1 | 10 |
-| **3.2** | **Generative Extraction** | Gemini JSON Extraction Logic | Linked | 3.1 | 12 |
-| | | "Pre-fill Form" Data Structure | Linked | 3.2 | 6 |
-| **3.3** | **E-Library RAG** | PDF Parsing (OCR Tesseract/LlamaParse)| Standalone | None | 12 |
-| | | Vector DB Setup (PgVector) | Linked | 2.1 | 8 |
-| | | Semantic Search API | Linked | 3.3 | 10 |
+| **2.1** | **Database** | Postgres Schema (Polymorphic Courts/Cases) | Standalone | None | 10 |
+| **2.2** | **Auth System** | JWT + Role Base Access (Admin, Subscriber, Contributor) | Linked | 2.1 | 8 |
+| **2.3** | **Subscription** | Stripe/Razorpay (Plans: District vs Pro) | Linked | 2.2 | 10 |
+| **2.4** | **Admin Dashboard** | React Panel for System Health & User Mgmt | Linked | 2.2 | 12 |
 
-**Phase 3 Total**: ~72 Hours (Allocated over 3 Weeks)
+**Phase 2 Total**: ~40 Hours (Weeks 9-11)
 
 ---
 
-## Phase 4: Frontend Mobile PWA (Weeks 13-16)
-*Focus: User Experience, Offline Mode, Responsiveness.*
+## Phase 3: Intelligence & RAG (Weeks 12-15)
+*Focus: "The Brain".*
 
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **4.1** | **Shell Architecture** | Router & Auth Context | Standalone | 2.2 | 8 |
-| | | Layouts (Mobile Bottom Nav) | Linked | 4.1 | 8 |
-| **4.2** | **Modules UI** | Project List & Details View | Linked | 2.3 | 12 |
-| | | **Voice Recorder Component** | Linked | 3.1 | 12 |
-| | | Form Pre-fill & Edit UI | Linked | 3.2 | 10 |
-| | | E-Library Search UI | Linked | 3.3 | 8 |
-| **4.3** | **PWA Features** | Service Worker (Caching) | Linked | 4.1 | 10 |
-| | | Manifest & Installability | Linked | 4.3 | 4 |
-| **4.4** | **Admin Dashboard** | Stats & User Management UI | Linked | 2.2 | 10 |
+| **3.1** | **Voice Pipeline** | API Endpoint + Whisper + Gemini "Hinglish" Extractor | Standalone | 2.2 | 15 |
+| **3.2** | **Legal RAG** | **Indian Kanoon API** Wrapper | Linked | 2.2 | 5 |
+| | | Vector Search (pgvector) for "Similar Cases" | Linked | 3.2 | 12 |
+| | | "Outcome Probability" Logic (LLM Analysis) | Linked | 3.2 | 12 |
 
-**Phase 4 Total**: ~82 Hours (Allocated over 4 Weeks)
+**Phase 3 Total**: ~44 Hours (Weeks 12-15)
 
 ---
 
-## Phase 5: QA, Deployment & Handoff (Weeks 17-18+)
-*Focus: Stability and Documentation.*
+## Phase 4: Advocate Dashboard PWA (Weeks 16-19)
+*Focus: Mobile Interface.*
 
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **5.1** | **Production Env** | VPS Setup (Docker, Nginx, SSL) | Standalone | None | 12 |
-| | | CI/CD Pipeline (GitHub Actions) | Linked | 5.1 | 8 |
-| **5.2** | **Testing** | End-to-End Scraper Tests | Linked | 1.4 | 10 |
-| | | Mobile Responsiveness Audit | Linked | 4.1 | 8 |
-| **5.3** | **Handoff** | User Manual & Admin Guide | Linked | None | 8 |
+| **4.1** | **Case Portfolio** | List View: "My Daily Board" (Unified) | Standalone | 2.1 | 15 |
+| **4.2** | **Alerts Hub** | UI to Draft & Approve Client Messages | Linked | 4.1 | 10 |
+| **4.3** | **Voice Recorder** | Audio Capture UI + Upload | Linked | 4.1 | 8 |
+| **4.4** | **Search UI** | Interface for RAG/Similar Case Search | Linked | 3.2 | 8 |
 
-**Phase 5 Total**: ~46 Hours (Allocated over 2 Weeks)
+**Phase 4 Total**: ~41 Hours (Weeks 16-19)
+
+---
+
+## Phase 5: Production & Handoff (Week 20)
+| Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **5.1** | **Deploy** | Docker Compose + VPS (Nginx, SSL, Redis) | Standalone | None | 10 |
+| **5.2** | **Docs** | API Documentation + Video Guide | Linked | None | 8 |
+
+**Phase 5 Total**: ~18 Hours
+
+---
+
+## 6. Risk Management & Contingencies
+
+| Risk Category | Potential Issue | Mitigation Strategy |
+| :--- | :--- | :--- |
+| **Technical** | `hcraj` changes CAPTCHA / DOM structure | **Auto-Healing Scrapers**: Detect changes -> Pause -> Alert Admin. Fallback to Contributor verification. |
+| **Legal** | eCourts bans IP range | **Rotating Proxies**: Use residential IPs. Implement "Ethical Rate Limiting" (1 req/min). |
+| **Business** | WhatsApp API Price Hike | **Hybrid Notification**: Switch low-priority alerts to Email/Push Notifications + SMS. |
+| **Data** | Stale Case Status | **Crowdsourcing**: Incentivize Junior Advocates to verify status manually. |
