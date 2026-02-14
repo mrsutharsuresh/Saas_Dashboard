@@ -34,6 +34,7 @@
 - [ ] **Auth & Role Management**
     - [ ] Role Logic (Admin / Subscriber / Contributor).
     - [ ] JWT + Opt-in Consent Log.
+    - [ ] **Data Erasure API** (DPDP Compliance).
     - [ ] Admin Dashboard API.
 - [ ] **Subscription Module**
     - [ ] **Razorpay Integration** (Recurring Plans).

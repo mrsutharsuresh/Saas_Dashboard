@@ -50,7 +50,7 @@
 | Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **2.1** | **Database** | Postgres Schema (Encrypted Columns) | Standalone | None | 10 |
-| **2.2** | **Auth System** | JWT + Opt-in Consent Audit Log | Linked | 2.1 | 8 |
+| **2.2** | **Auth System** | JWT + Opt-in Audit Log + **Delete Account API** | Linked | 2.1 | 8 |
 | **2.3** | **Subscription** | **Razorpay Integration** (Recurring/One-time) | Linked | 2.2 | 12 |
 | **2.4** | **Admin Dashboard** | React Panel for System Health & User Mgmt | Linked | 2.2 | 12 |
 | **2.5** | **Support Module** | Ticket API + Admin Dashboard for Issues | Linked | 2.2 | 10 |

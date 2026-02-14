@@ -9,19 +9,25 @@ Building a scalable, AI-powered **Legal Practice Management Platform** for Advoc
 ### A. Central / Federal Systems
 1.  **Supreme Court of India** (`sci.gov.in`):
     *   **Scope**: Case Status, Orders, Judgments.
+    *   **Access**: Scraper (Captcha: Image).
 2.  **eCourts Services** (`services.ecourts.gov.in`):
-    *   **Scope**: All District & Sessions Courts within **Rajasthan**.
-3.  **eCourts Judgments** (`https://judgments.ecourts.gov.in/pdfsearch/index.php`):
-    *   **Scope**: Search & Download Judgments (PDF) across all district courts.
-    *   **Integration**: Ingested into **Vector DB** for private RAG (complementing Indian Kanoon).
+    *   **Scope**: Unified Case History for Rajasthan Districts.
+    *   **Access**: Scraper (Captcha: 5-char Alphanumeric).
+    *   **Note**: No native public API; Mobile App endpoints may be explored for stability.
+3.  **eCourts Judgments** (`judgments.ecourts.gov.in`):
+    *   **Scope**: Judgment PDF Search & Download.
+    *   **Access**: Scraper (Captcha: 5-char Alphanumeric).
 
 ### B. Rajasthan State Systems
-1.  **Rajasthan High Court** (`hcraj.nic.in`):
-    *   **Critical Feature**: Live Display Board (Real-Time Item Number Polling).
-2.  **Revenue Board** (`gcms.rajasthan.gov.in`):
-    *   **Scope**: Revenue cases, appeals.
-3.  **Land Records** (`apnakhata.rajasthan.gov.in`):
-    *   **Scope**: Jamabandi, Mutation Status (Requires Captcha Handling).
+3.  **Rajasthan High Court** (`hcraj.nic.in`):
+    *   **Scope**: Live Display Board (Jaipur/Jodhpur Benches).
+    *   **Access**: High-Frequency Polling (10s interval) of JSON/HTML endpoint.
+4.  **Revenue Board** (`gcms.rajasthan.gov.in`):
+    *   **Scope**: Revenue Case Status.
+    *   **Access**: Scraper (Standard Form Post).
+5.  **Land Records** (`apnakhata.rajasthan.gov.in`):
+    *   **Scope**: Jamabandi, Mutation.
+    *   **Access**: Scraper (Captcha: Image/Audio).
 
 ---
 
@@ -30,13 +36,13 @@ Building a scalable, AI-powered **Legal Practice Management Platform** for Advoc
 ### A. Admin (Superuser)
 *   **Responsibility**: Monitor system health and revenue.
 *   **Key Features**:
-    *   **Scraper Dashboard**: View success rates of scraping jobs per state. (e.g., "Rajasthan HC: 98% Success", "UP Bhulekh: 50% Fail - Captcha Issue").
+    *   **Scraper Dashboard**: View success rates.
     *   **User Management**: Approve/Ban Advocates.
     *   **Subscription Plans**: **Unified Paid Tier (₹499/mo)**.
         *   Includes **Unlimited Case Tracking**.
         *   **Real-Time Live Board Alerts**.
         *   **Daily WhatsApp Briefs**.
-        *   **RAG Search** (Judgments).
+        *   **RAG Search** (Source: eCourts Judgments + Indian Kanoon).
 
 ### B. Customer Advocate (Subscriber)
 *   **Responsibility**: Track their case portfolio.
@@ -45,38 +51,45 @@ Building a scalable, AI-powered **Legal Practice Management Platform** for Advoc
     2.  **Add Case**: Enters CNR Number OR Advocate Name. System auto-populates list.
     3.  **Daily Routine**: Receives "Morning Brief" WhatsApp at 8 AM.
     4.  **Live Tracking**: Receives "Case Incoming" alert when item number is close.
-    5.  **Intelligence**: Uses Search Bar to query "Similar Judgments" (Source: eCourts + Indian Kanoon).
+    5.  **Intelligence**: Uses Search Bar to query "Similar Judgments".
 
 ### C. Core Tracking & Intelligence
 *   **Scraper Engine**: Robust extraction from the above portals.
 *   **IP Proxy Implementation**: Mandatory rotation of Residential IPs to prevent blocking.
-*   **Logger Module**: Centralized logging (Error, Info, Warning) for debugging scraper failures and system errors.
+*   **Logger Module**: Centralized logging (Error, Info, Warning).
 
 ### D. User & Subscription Management
 *   **Subscription Manager**: Handle User Lifecycles (Paid -> Expired -> Renewed).
-*   **Payment Gateway**: Integration with **Razorpay** (or similar) for:
-    *   Recurring Subscriptions (Auto-debit UPI/Cards).
-    *   One-time Top-ups (for Credits/Quota).
+*   **Payment Gateway**: Integration with **Razorpay** (recurring mandate via UPI/Cards).
+*   **User Rights**: "Delete Account" button (Right to Erasure) to permanently wipe user data from DB.
 
 ### E. Security & Compliance (DPDP Act 2023)
-*   **Data Encryption**: All Case Data and PII (Personal Identifiable Information) must be encrypted at rest (AES-256).
-*   **Consent**: "Opt-in" tracking for clients.
+*   **Data Encryption**: AES-256 for all PII and Case Data at rest.
+*   **Data Residency**: Hosting in **India (Mumbai)** region to ensure compliance.
+*   **Consent**: "Opt-in" tracking for clients with clear Notice.
+*   **Liability**: Non-compliance carries penalties up to **₹250 Crores**. Strict adherence is mandatory.
 
 ### F. Contributor Advocate (Source)
 *   **Responsibility**: Provide ground-level intelligence (Crowdsourcing).
 *   **Workflow**:
-    1.  **Voice Note**: Records "Aaj court 5 mein judge sahab nahi aaye" via App.
-    2.  **Verification**: System transcribes and cross-verifies with other inputs.
+    1.  **Voice Note**: Records "Aaj court 5 mein judge sahab nahi aaye".
+    2.  **Verification**: System transcribes and verified against live board data.
 
 ### G. Support & Feedback
 *   **Feedback/Ticket Module**:
     *   In-App "Report Issue" button.
-    *   Ticketing System for "Scraper Failed" or "Wrong Data" reports.
 
 ---
 
 ## 4. Automated Notification Workflow (Hinglish)
 *Channel: WhatsApp Business API (WABA)*
+
+### Pricing Note (2025 Update)
+*   **Utility Messages**: ~₹0.12 - ₹0.15 per delivered message (Business Initiated).
+*   **Cost Implication**: 
+    *   Daily Brief + Real-Time Alert = ~2 msgs/day.
+    *   Monthly Cost: 60 * ₹0.15 = **₹9.00/user**.
+    *   This is well within the **₹499** subscription margin.
 
 ### A. Morning Brief (8:00 - 9:00 AM)
 > **Template**:
