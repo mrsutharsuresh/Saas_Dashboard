@@ -139,3 +139,38 @@ Building a scalable, AI-powered **Legal Practice Management Platform** for Advoc
 ## 6. Deliverables (Documentation)
 1.  **Developer Docs**: Setup guide, API Reference, Architecture Diagram.
 2.  **User Manual**: "How to Add Case", "How to Record Voice Note".
+
+---
+
+## Appendix: Commercial API Options (Buy vs Build)
+
+While our primary strategy is custom scraping, the following commercial APIs exist as potential fallbacks or "fast-track" options:
+
+### 1. Court Data (Judgments & Case Status)
+*   **LegalKart** (`legalkart.com`):
+    *   **Features**: Real-time Case Status, Display Board APIs (High Courts), Cause Lists.
+    *   **Coverage**: Supreme Court, High Courts, District Courts.
+    *   **Cost**: **~₹1 - ₹5 per hit** (Volume based). Enterprise plans available.
+    *   **Pros**: Explicit "Display Board API" mentioned. High reliability.
+    *   **Cons**: Paid (Per-hit cost).
+*   **Surepass** (`surepass.io`):
+    *   **Features**: CNR Search, Court Record Check.
+    *   **Coverage**: Pan-India.
+    *   **Cost**: **~₹2 - ₹5 per verification**.
+    *   **Pros**: Good for verification/KYC.
+    *   **Cons**: Less focused on real-time "Practice Management" updates.
+*   **IDfy** (`idfy.com`):
+    *   **Features**: Background Verification.
+    *   **Cost**: **~₹50 - ₹100 per full check** (Enterprise only).
+    *   **Focus**: Criminal Record Checks (Employment Screening).
+*   **Signzy**:
+    *   **Focus**: FinTech/Banking KYC.
+    *   **Cost**: Enterprise Pricing (High Volume Minimums).
+
+### 2. Land Records (Rajasthan)
+*   **Status**: **No Commercial API Exists**.
+*   **Reason**: Land records are state subjects. Internal government APIs are not public.
+*   **Strategy**: **Custom Scraper** is mandatory for `Apna Khata` and `GCMS`.
+
+### Recommendation
+*   **Hybrid Approach**: Build scrapers for Rajasthan-specific portals (Land/Revenue). Consider **LegalKart API** for Court Data if scraper stability becomes a blocker.
