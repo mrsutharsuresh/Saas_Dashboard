@@ -51,5 +51,5 @@ Can you find a Bangalore Dev for ₹2.5L?
 
 3.  **Hybrid Approach (Best of Both)**:
     *   **Core Scraper**: Tier-2 Dev (Ahmedabad) -> ₹30k/mo.
-    *   **AI/Architecture**: Tier-1 Consultant (Bangalore) -> ₹2000/hr for 20 hours -> ₹40k.
+    *   **AI/Architecture**: Tier-11 Consultant (Bangalore) -> ₹2000/hr for 20 hours -> ₹40k.
     *   This keeps code cheap but architecture solid.

@@ -1,7 +1,10 @@
-# Legal SaaS Architecture (Pan-India)
+# Legal SaaS Architecture (Rajasthan + Central Pilot)
 
 ## 1. System Overview
-A scalable, distributed architecture designed to handle high-concurrency scraping, real-time alerts, and AI-driven legal intelligence. The system uses a **Microservices-ready Monolith** pattern with **FastAPI** as the core coordinator and **Celery** for asynchronous heavy lifting.
+A robust, secure platform designed for **Rajasthan Advocates** (Pilot) but built on a **Universal Architecture** capable of Pan-India scale. 
+*   **Scalability**: Supports **100+ Concurrent Scrapers** via Celery.
+*   **Security**: **AES-256 Encryption** (DPDP Compliant) & Residential Proxy rotation.
+*   **Reliability**: Targeted **99.5% Uptime** with auto-healing scraper logic.
 
 ---
 
@@ -9,15 +12,21 @@ A scalable, distributed architecture designed to handle high-concurrency scrapin
 ```mermaid
 graph TD
     User[Advocate Mobile PWA] -->|Auth/Inputs| API[FastAPI Gateway]
-    API -->|Read/Write| DB[(PostgreSQL + pgvector)]
+    API -->|Read/Write (Encrypted)| DB[(PostgreSQL + pgvector)]
     
+    subgraph "Core Modules"
+        Logger[Central Logger] -->|Captures| API
+        Logger -->|Captures| ScraperWorker
+        Reasoning[AI Engine] -->|Process| Voice/RAG
+        Payment[Razorpay/Stripe] -->|Subscription| User
+        Feedback[Support Ticket] -->|Issue Report| Admin
+    end
+
     subgraph "Scraper Engine (The Worker Nodes)"
-        Scheduler[Beat Scheduler] -->|Triggers| TaskQueue[Redis Queue]
-        TaskQueue -->|Consumes| Worker[Celery Worker]
-        
-        Worker -->|Universal Scraper| eCourts[eCourts Services]
-        Worker -->|State Adapter| Revenue[Revenue/Land Portals]
-        Worker -->|Live Poller| HighCourt[HC Display Boards]
+        ProxyMgr[Proxy Manager] -->|Rotate IPs| ScraperWorker
+        ScraperWorker -->|Polls| HCRaj[HC Raj Display Board]
+        ScraperWorker -->|Scrapes| Central[Supreme Court/eCourts]
+        ScraperWorker -->|Scrapes| State[Revenue/Land Records]
     end
     
     subgraph "Intelligence Layer"
@@ -31,7 +40,7 @@ graph TD
         WhatsAppGateway -->|Hinglish Msg| EndUser[Advocate]
     end
 
-    Worker -->|Update Status| DB
+    ScraperWorker -->|Update Status| DB
     DB -->|State Change| AlertEngine
 ```
 
@@ -39,16 +48,17 @@ graph TD
 
 ## 3. Component Details (Deep Dive)
 
-### A. Scraper Engine (The Core)
-*   **Architecture**: `AbstractScraper` class with `StateAdapter` implementations.
-*   **Technology**: **Python Playwright** (Async) + **BeautifulSoup4**.
-*   **Stealth & Resilience Strategy**:
-    *   **Browser Fingerprinting**: Use `playwright-stealth` to mimic real user behavior (e.g., random mouse movements, real User-Agent strings).
-    *   **Proxy Rotation**: Application of **Residential IPs** (India Geo-targeted) to avoid IP bans.
+### A. Scraper Engine & Proxy Management
+*   **Proxy Strategy**: 
+    *   **Residential IPs**: Mandatory for accessing `apnakhata` and `hcraj` to avoid blocking.
+    *   **Rotation Logic**: Rotate IP every `N` requests or on `429/403` error.
+    *   **Implementation**: `ProxyManager` class handles IP pool health checks.
     *   **Captcha Solving**: 
         *   **Tier 1**: Local OCR (Tesseract) for simple captchas (Cost: ₹0).
         *   **Tier 2**: 2Captcha/Anti-Captcha API for complex challenges (Cost: ~₹0.10/solve).
-    *   **Backoff Strategy**: Exponential backoff (e.g., 2s, 4s, 8s) on 503/429 errors.
+*   **Target Portals**:
+    *   **Central**: Supreme Court (`sci.gov.in`), eCourts Services (`services.ecourts`), eCourts Judgments (`judgments.ecourts`).
+    *   **Rajasthan**: High Court (`hcraj`), Revenue (`gcms`), Land (`apnakhata`).
 
 ### B. Live Board Poller (Real-Time)
 *   **Specific Challenge**: `hcraj.nic.in` and other HCs have "Display Boards" that update every 10-30 seconds.
@@ -64,8 +74,15 @@ graph TD
     *   **Process**: `OpenAI Whisper` (Model: `tiny` or `base` for speed) -> Transcribes Hinglish -> `Gemini Flash` extracts {CaseNo, NextDate, Judge}.
 *   **RAG (Retrieval Augmented Generation)**:
     *   **Vector DB**: `pgvector` extension in Postgres.
-    *   **Source**: **Indian Kanoon API** (External).
+    *   **Data Sources**: **Indian Kanoon API** + **eCourts Judgments** (PDFs).
     *   **Flow**: User Query -> Embedding (OpenAI `text-embedding-3-small`) -> Vector Search -> Context Retrieval -> LLM Summary.
+
+### D. Security & Compliance (DPDP Act 2023)
+*   **Encryption at Rest**:
+    *   **PII & Case Data**: Encrypted using **AES-256-GCM** before storing in PostgreSQL.
+    *   **Keys**: Managed via Environment Variables / AWS KMS.
+*   **Data Masking**: Logs must NOT contain full case details or user PII.
+*   **Consent**: Explicit opt-in audit trail for tracking client cases.
 
 ### D. Notification Hub
 *   **Queue System**: Priority Queues in Celery (`high_prio` for Real-time alerts, `low_prio` for Daily Briefs).
@@ -75,32 +92,44 @@ graph TD
     *   Batch "Daily Brief" and "Next Date" alerts to minimize paid template usage context.
     *   Est. Cost: **₹0.13 - ₹0.15** per Utility Message.
 
----
-
-## 4. Security, Compliance & Scale
-
-### A. Data Security & Privacy (DPDP Act 2023)
-*   **Encryption**: AES-256 encryption for Case Data at rest; TLS 1.3 for data in transit.
-*   **Consent**: Strict "Opt-in" flow for Advocates to track cases.
-*   **Data Residency**: All data stored in **India Region (Mumbai)** servers to comply with data localization norms.
-
-### B. Ethical Scraping Policy
+### E. Ethical Scraping Policy
 *   **Robots.txt**: Scrapers must parse and respect `Allow/Disallow` directives where technically feasible.
 *   **Rate Limiting**: Hard limit of **1 Request / Minute** per IP per Domain to prevent DoS.
 *   **Identity**: User-Agent string will identify as `Bot/LegalTech-Research` to be transparent to admins.
 
-### C. Infrastructure Scalability
+### F. Payment & Subscription Module
+*   **Gateway**: **Razorpay** (Primary for India) / Stripe (Global Backup).
+*   **Features**:
+    *   **Recurring Billing**: Subscriptions (Monthly/Yearly).
+    *   **Top-ups**: Credits for extra Court Syncs or Voice Notes.
+    *   **Invoicing**: Auto-generation of GST-compliant invoices.
+
+### G. Logging & Monitoring
+*   **Logger Module**: 
+    *   **Standard**: Structured JSON logging (`structlog`).
+    *   **Levels**: `INFO` (Flow), `WARNING` (Retry), `ERROR` (Failure), `CRITICAL` (System Down).
+    *   **Storage**: File rotation (Dev) / ELK Stack or CloudWatch (Prod).
+*   **Alerting**: Slack/Email alerts to Admin on `CRITICAL` scraper failures.
+
+### H. Infrastructure Scalability
 *   **Database**: Managed PostgreSQL with Read Replicas for high-read (Dashboard) traffic.
 *   **Worker Nodes**: Auto-scaling Group (ASG) for Scrapers based on Queue Depth.
 *   **Monitoring**: Prometheus + Grafana for scraping success rates and error spikes.
 
+### I. Support & Feedback
+*   **Ticketing System**: Internal module for users to report "Data Mismatch" or "Feature Request".
+*   **Admin View**: Dashboard to triage and resolve reported issues.
+
 ---
 
-## 5. Database Schema (Conceptual)
+## 4. Database Schema (Conceptual)
 
 ### Entities
-*   **Advocate**: `id`, `name`, `phone`, `subscription_tier`, `state_licenses`.
-*   **Court**: `id`, `type` (HC/District/Revenue), `state`, `adapter_code` (e.g., `RAJ_HC`).
-*   **Case**: `id`, `cnr_number`, `court_id`, `petitioner`, `respondent`, `current_stage`, `next_date`.
+*   **Advocate**: `id`, `name`, `phone`, `subscription_status`, `payment_id`.
+*   **Court**: `id`, `type` (HC/District/Revenue), `state`, `adapter_code` (e.g., `RAJ_HC`, `RAJ_DIST`, `SUPREME_COURT`).
+*   **Case**: `id`, `cnr_number`, `encrypted_data`, `court_id`, `petitioner`, `respondent`, `current_stage`, `next_date`.
 *   **Hearing**: `id`, `case_id`, `date`, `business` (Proceeding), `judge_name`.
 *   **LiveTracking**: `id`, `advocate_id`, `case_id`, `today_item_no`, `status` (Pending/Called).
+*   **Subscription**: `id`, `user_id`, `plan_id`, `start_date`, `end_date`, `status`.
+*   **Payment**: `id`, `transaction_id`, `amount`, `gateway_ref`, `status`.
+*   **Feedback**: `id`, `user_id`, `category`, `message`, `status`.

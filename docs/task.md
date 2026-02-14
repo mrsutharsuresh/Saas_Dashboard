@@ -1,55 +1,65 @@
-# Legal SaaS Tasks (Pan-India)
+# Legal SaaS Tasks (Rajasthan + Central Pilot)
 
 ## Phase 0: Expanded POC - Feasibility Check
 - [ ] **Setup & Config**
     - [ ] Repo Initialization (FastAPI + Playwright).
-    - [ ] API Keys: OpenAI, 2Captcha, IndianKanoon.
-    - [ ] WhatsApp Sandbox (Twilio/Meta).
-- [ ] **Broad Integration Tests**
-    - [ ] **eCourts (District)**: Fetch 1 Case Status.
-    - [ ] **High Court (Rajasthan)**: Poll Live Display Board (Client-Side).
-    - [ ] **Revenue/Land**: Fetch 1 `gcms` Case + 1 `apnakhata` Record.
+    - [ ] API Keys: OpenAI, 2Captcha, Razorpay.
+    - [ ] **Logger Module**: `structlog` setup (Local File).
+- [ ] **Integration Tests (Strict Scope)**
+    - [ ] **eCourts Services**: Fetch 1 Rajasthan District Case.
+    - [ ] **eCourts Judgments**: Fetch 1 Judgment PDF (`judgments.ecourts`).
+    - [ ] **Supreme Court**: Fetch 1 SC Case Status.
+    - [ ] **Rajasthan HC**: Poll Live Display Board (Client-Side).
+    - [ ] **Revenue/Land**: Fetch 1 `gcms` + 1 `apnakhata` Record.
+    - [ ] **Payment**: Create 1 Test Order on Razorpay.
     - [ ] **WhatsApp**: Send "Hello World" Template.
     - [ ] **Voice**: Transcribe 1 Sample Audio -> JSON.
     - [ ] **Legacy**: Fetch 1 Judgment from Indian Kanoon.
 - [ ] **Demo**
     - [ ] End-to-End Flow (Mocked Data -> WhatsApp Alert).
 
-## Phase 1: Universal Scraper Engine
-- [ ] **Core Architecture**
-    - [ ] `AbstractScraper` & `StateAdapter` Pattern.
-    - [ ] Residential Proxy Manager.
+## Phase 1: Core Engine & Security
+- [ ] **Scraper Architecture**
+    - [ ] `AbstractScraper` + `ProxyManager` (Residential IP Rotation).
+- [ ] **Security Layer (DPDP Compliance)**
+    - [ ] AES-256 Encryption Utility for DB.
 - [ ] **Production Adapters**
     - [ ] **eCourts**: Universal District Scraper.
-    - [ ] **Rajasthan**: Full implementation (HC + Revenue + Land).
-    - [ ] **Delhi**: Full implementation (HC + District).
+    - [ ] **Central**: Supreme Court Scraper.
+    - [ ] **Rajasthan**: HC + Revenue + Land Scrapers.
 
-## Phase 2: Core Backend (User & Data)
+## Phase 2: Backend, Payments & Support
 - [ ] **Database Design**
-    - [ ] Models: `Advocate`, `Case`, `Court` (Polymorphic).
+    - [ ] Models: `Advocate`, `Case`, `Subscription`, `SupportTicket`.
 - [ ] **Auth & Role Management**
-    - [ ] Contributor vs Subscriber Logic.
+    - [ ] Role Logic (Admin / Subscriber / Contributor).
+    - [ ] JWT + Opt-in Consent Log.
     - [ ] Admin Dashboard API.
 - [ ] **Subscription Module**
-    - [ ] Payment Gateway Integration.
+    - [ ] **Razorpay Integration** (Recurring Plans).
+    - [ ] Invoice Generation Logic.
+- [ ] **Support Module**
+    - [ ] Ticket Creation API.
+    - [ ] Admin Ticket View.
 
 ## Phase 3: Legal Intelligence
 - [ ] **Voice Pipeline**
-    - [ ] Audio Upload Endpoint.
-    - [ ] Whisper Transcribe Service.
-    - [ ] Gemini "Hinglish" Extractor.
+    - [ ] Audio Upload + Whisper + Gemini "Hinglish" Extractor.
 - [ ] **RAG Engine**
     - [ ] Indian Kanoon API Wrapper.
-    - [ ] "Similar Case" Search Logic.
+    - [ ] Vector Search Logic.
 
 ## Phase 4: Frontend (Advocate PWA)
 - [ ] **App Structure**
     - [ ] Mobile-First Layout (React/Vite).
 - [ ] **Key Features**
-    - [ ] "My Daily Board" (Unified List).
-    - [ ] Client Alert Approval Flow.
+    - [ ] "My Daily Board" (Decrypted View).
+    - [ ] Support Ticket UI.
+    - [ ] Subscription Management UI.
 
-## Phase 5: Deployment
-- [ ] **Production Ops**
-    - [ ] Docker Compose (App + Workers + DB).
-    - [ ] Nginx & SSL.
+## Phase 5: Production & Docs
+- [ ] **Deploy**
+    - [ ] Docker Compose + Nginx + SSL.
+- [ ] **Documentation**
+    - [ ] Developer Guide.
+    - [ ] User Manual (English/Hindi).
