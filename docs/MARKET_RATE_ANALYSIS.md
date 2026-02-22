@@ -40,40 +40,40 @@ Historically (2023-2024), the general average for Indian freelancers across plat
 ---
 
 ## 4. Phase-Wise Cost Projection
-*Based on the ~466 total hours computed through granular use-case analysis.*
+*Based on the ~885 total hours computed through hyper-realistic use-case analysis.*
 
 ### Detailed Scope of Phase 0 (Expanded POC)
-The Phase 0 Proof of Concept (POC) is foundational. We have expanded it into a microscopic 36-step breakdown available in **[POC_DETAILED_DEVELOPMENT_PLAN.md](POC_DETAILED_DEVELOPMENT_PLAN.md)**. 
-**Total POC Phase**: **125 Hours** | ₹1,25,000 - ₹1,50,000.
+The Phase 0 Proof of Concept (POC) is foundational. We have expanded it into a microscopic 36-step breakdown available in **[POC_DETAILED_DEVELOPMENT_PLAN.md](POC_DETAILED_DEVELOPMENT_PLAN.md)**, *aggressively adjusted for real-world API limits, proxy bans, and LLM hallucinations*. 
+**Total POC Phase**: **215 Hours** | ₹2,15,000 - ₹2,58,000.
 
 ### Overall Project Build Estimate
 
 | Phase | Est. Hours | Description | Estimated Dev Cost (₹) |
 | :--- | :--- | :--- | :--- |
-| **Phase 0: Expanded POC** | 125 | Prove 9 critical connections (Scraping, WA, Voice, RAG) | ₹1,25,000 - ₹1,50,000 |
-| **Phase 1: Core Engine & Proxy**| 80 | Scalable scraper architecture, DPDP encryption | ₹80,000 - ₹1,00,000 |
-| **Phase 2: Backend & Subscriptions**| 60 | DB Schema completion, Razorpay, Auth, Ticket APIs | ₹60,000 - ₹75,000 |
-| **Phase 3: Intelligence & RAG**| 60 | Verified Voice Pipeline, pgvector search | ₹75,000 - ₹95,000 |
-| **Phase 4: Advocate PWA** | 100 | React Mobile-First Frontend, UI/UX | ₹70,000 - ₹90,000 |
-| **Phase 5: Deploy & Docs** | 60 | Buffer, Docker Compose, SSL, Handover | ₹60,000 - ₹75,000 |
-| **TOTAL (End-to-End)** | **~485 Hrs** | **Fully Functional SaaS Platform** | **₹4,70,000 - ₹5,85,000** |
+| **Phase 0: Expanded POC** | 215 | Prove 9 critical connections against real roadblocks | ₹2,15,000 - ₹2,58,000 |
+| **Phase 1: Core Engine & Proxy**| 140 | Browser fingerprint spoofing, KMS integration, DLQs | ₹1,40,000 - ₹1,68,000 |
+| **Phase 2: Backend & Subscriptions**| 110 | DB Partitioning, S3 Secure Uploads, Razorpay Webhooks | ₹1,10,000 - ₹1,32,000 |
+| **Phase 3: Intelligence & RAG**| 110 | LLM Human-in-loop, Hybrid Semantic Search, Huge PDFs | ₹1,10,000 - ₹1,32,000 |
+| **Phase 4: Advocate PWA** | 170 | Service Worker Offline Caching, WebSockets, Infinite Scroll | ₹1,70,000 - ₹2,04,000 |
+| **Phase 5: Deploy & Docs** | 140 | Chaos Engineering (500 bots), Kubernetes/Swarm CI/CD | ₹1,40,000 - ₹1,68,000 |
+| **TOTAL (End-to-End)** | **~885 Hrs** | **Fully Functional SaaS Platform** | **₹8,85,000 - ₹10,62,000** |
 
 ---
 
 ## 5. Build Strategy: Freelancer vs. Micro-Agency
 
-At a budget of **₹4.7L – ₹5.9L**, you have two primary execution paths in the Indian market:
+At a budget of **₹8.8L – ₹10.6L**, you have two primary execution paths in the Indian market:
 
 ### Option A: The "Unicorn" Full-Stack Freelancer (High Risk, Lowest Cost)
-*   **Cost**: ~₹4,75,000.
-*   **Profile**: A highly talented mid-level full-stack engineer who knows Python, Scraping, and React.
+*   **Cost**: ~₹8,85,000.
+*   **Profile**: A highly talented mid-level full-stack engineer who knows Python, Scraping, Kubernetes, and React.
 *   **Pros**: Cheaper, single point of contact.
-*   **Cons**: Slower delivery (1 person doing 485 hours = ~3 to 4 months full-time). High key-person dependency. If they struggle with a specific domain (like AI or proxy rotation), the project stalls.
+*   **Cons**: Slower delivery (1 person doing 885 hours = ~6 to 7 months full-time). High key-person dependency. Burnout risk is very high for one developer handling scale-level infrastructure.
 
 ### Option B: The Freelancer Pod / Micro-Agency (Medium Risk, Best Value)
-*   **Cost**: ~₹5,80,000 - ₹6,80,000.
-*   **Profile**: A team of 2-3 mid-level freelancers (1 Backend/Scraping, 1 Frontend, 1 part-time AI consultant).
-*   **Pros**: Faster time-to-market. Specialized code quality (the Python guy isn't forced to write React).
+*   **Cost**: ~₹10,50,000 - ₹12,000,000.
+*   **Profile**: A team of 2-3 mid-level freelancers (1 Backend/Infra, 1 Frontend, 1 part-time AI consultant).
+*   **Pros**: Faster time-to-market. Specialized code quality. Redundancy if one developer falls sick.
 *   **Cons**: Requires a slightly higher budget and minor project management overhead from your side to ensure they integrate well.
 
 ---
