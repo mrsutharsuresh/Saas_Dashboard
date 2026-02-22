@@ -12,3 +12,5 @@ google-generativeai
 python-dotenv
 websockets
 # Mobile/Voice related if needed (Whisper SDK requires more later, for now we assume API)
+structlog
+beautifulsoup4

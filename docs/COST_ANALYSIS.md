@@ -26,8 +26,8 @@
 | **Server** | DigitalOcean / Hetzner | 8GB RAM VPS (For Scrapers) | ₹2,500 |
 | **Database** | Managed Postgres | 10GB Storage + Daily Backup | ₹1,500 |
 | **Proxies** | BrightData / Smartproxy | 5GB Residential Bandwidth | ₹3,000 |
-| **Captcha** | 2Captcha | ~5,000 Solves/day (High Traffic) | ₹2,000 |
-| **WhatsApp** | Meta API (BSP) | ~10k Utility Msgs (₹0.15/msg) | ₹1,500 |
+| **Captcha** | 2Captcha (Primary) | ~5,000 Solves/day (Accurate, legacy support) | ₹2,000 |
+| **WhatsApp** | Meta API (BSP) | ~10k Utility Msgs (₹0.15/msg). *Cost optimized via deduplication logic.* | ₹1,500 |
 | **AI API** | OpenAI / Gemini | Whisper + LLM (Pay-as-you-go) | ₹2,000 |
 | **TOTAL** | | | **~₹12,500 / Month** |
 
@@ -43,12 +43,12 @@
 | **Freelancer (Us)**| **₹2.5L (One-time)** | Cost-effective, specialized. | Slower than a 10-person team. |
 
 ### B. Break-Even Analysis
-*   **Target Subscription Price**: ₹499/month (Pro Plan).
+*   **Target Subscription Price**: **₹499/month (Baseline/Sample)**. *Note: Final pricing will be tiered based on the volume of tracking requests allowed per user.*
 *   **Operational Cost per User**: ~₹50/month (WhatsApp + AI).
-*   **Margin**: ₹449/month per user.
+*   **Margin**: ~₹449/month per user (on the baseline tier).
 *   **Break-Even Point**:
-    *   Need to recover ₹2,50,000 Ops Cost.
-    *   **~50 Paying Users** covers Ops + Dev cost recovery in < 1 Year.
+    *   Need to recover ₹2,50,000 One-time Dev Cost.
+    *   **~50-60 Paying Users** covers ongoing DB/Ops + full Dev cost recovery in < 1 Year.
 
 ### C. Value Proposition
 For an Advocate, missing **ONE** hearing date due to a missed manual check can cost fees/reputation worth **₹10,000+**.

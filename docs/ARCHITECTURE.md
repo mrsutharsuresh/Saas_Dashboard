@@ -31,7 +31,8 @@ graph TD
     
     subgraph "Intelligence Layer"
         Audio[Voice Notes] -->|Whisper API| Transcriber[Text Engine]
-        Transcriber -->|LLM Extraction| StructuredData[JSON Case Entity]
+        Transcriber -->|Verify vs Web Data| VerifiedData[Validated Text]
+        VerifiedData -->|LLM Extraction| StructuredData[JSON Case Entity]
         RAG[Legal Search] -->|Indian Kanoon API| Precedents[Judgments]
     end
     
@@ -54,8 +55,8 @@ graph TD
     *   **Rotation Logic**: Rotate IP every `N` requests or on `429/403` error.
     *   **Implementation**: `ProxyManager` class handles IP pool health checks.
     *   **Captcha Solving**: 
-        *   **Tier 1**: Local OCR (Tesseract) for simple captchas (Cost: ₹0).
-        *   **Tier 2**: 2Captcha/Anti-Captcha API for complex challenges (Cost: ~₹0.10/solve).
+        *   **Primary**: **2Captcha** (Used heavily due to proven ~90% success rate).
+        *   **Risk Monitoring**: Due to AI advancements making captchas harder, fallback manual/AI solvers may be needed if success drops below SLA.
 *   **Target Portals**:
     *   **Central**: Supreme Court (`sci.gov.in`), eCourts Services (`services.ecourts`), eCourts Judgments (`judgments.ecourts`).
     *   **Rajasthan**: High Court (`hcraj`), Revenue (`gcms`), Land (`apnakhata`).
@@ -81,11 +82,12 @@ graph TD
 *   **Encryption at Rest**:
     *   **PII & Case Data**: Encrypted using **AES-256-GCM** before storing in PostgreSQL.
     *   **Keys**: Managed via Environment Variables / AWS KMS.
-*   **Data Masking**: Logs must NOT contain full case details or user PII.
-*   **Consent**: Explicit opt-in audit trail for tracking client cases.
+*   **Data Masking & Deletion**: Deletion requests wipe DB and Backups, but strictly exclude logs (too tedious). Logs must NOT contain full case details or user PII.
+*   **Consent**: Explicit opt-in audit trail for tracking client cases. **Must be explicitly stored in the user data schema.**
 
-### D. Notification Hub
+### E. Notification Hub
 *   **Queue System**: Priority Queues in Celery (`high_prio` for Real-time alerts, `low_prio` for Daily Briefs).
+*   **WhatsApp Deduplication**: Logic exists to stop duplicate WhatsApp notifications for the same event.
 *   **Channel**: **WhatsApp Business API** (WABA).
 *   **Pricing Optimization**: 
     *   Utilize **24-hour Free Window** for user-initiated conversations.
@@ -125,11 +127,11 @@ graph TD
 ## 4. Database Schema (Conceptual)
 
 ### Entities
-*   **Advocate**: `id`, `name`, `phone`, `subscription_status`, `payment_id`.
+*   **Advocate**: `id`, `name`, `phone`, `subscription_status`, `payment_id`, `consent_given` (Boolean).
 *   **Court**: `id`, `type` (HC/District/Revenue), `state`, `adapter_code` (e.g., `RAJ_HC`, `RAJ_DIST`, `SUPREME_COURT`).
 *   **Case**: `id`, `cnr_number`, `encrypted_data`, `court_id`, `petitioner`, `respondent`, `current_stage`, `next_date`.
 *   **Hearing**: `id`, `case_id`, `date`, `business` (Proceeding), `judge_name`.
 *   **LiveTracking**: `id`, `advocate_id`, `case_id`, `today_item_no`, `status` (Pending/Called).
-*   **Subscription**: `id`, `user_id`, `plan_id`, `start_date`, `end_date`, `status`.
+*   **Subscription**: `id`, `user_id`, `plan_id`, `start_date`, `end_date`, `status` (Supports Tiered limits).
 *   **Payment**: `id`, `transaction_id`, `amount`, `gateway_ref`, `status`.
 *   **Feedback**: `id`, `user_id`, `category`, `message`, `status`.

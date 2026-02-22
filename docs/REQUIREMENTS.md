@@ -51,29 +51,32 @@ Building a scalable, AI-powered **Legal Practice Management Platform** for Advoc
     2.  **Add Case**: Enters CNR Number OR Advocate Name. System auto-populates list.
     3.  **Daily Routine**: Receives "Morning Brief" WhatsApp at 8 AM.
     4.  **Live Tracking**: Receives "Case Incoming" alert when item number is close.
-    5.  **Intelligence**: Uses Search Bar to query "Similar Judgments".
+    5.  **e-Filing Sync**: System auto-matches "Filed Cases" (Diary No.) with "Listed Cases" (Case No.) when they appear on board.
+    6.  **Intelligence**: Uses Search Bar to query "Similar Judgments".
 
 ### C. Core Tracking & Intelligence
-*   **Scraper Engine**: Robust extraction from the above portals.
+*   **Scraper Engine**: Robust extraction from the above portals. **Note: Scrapers only extract available website data; no OCR is performed on documents at this stage. Addition will be done separately laetr and on request**
+*   **Scraper Resilience**: Implement **Health Checks** to detect government portal UI changes that cause scraper failure.
 *   **IP Proxy Implementation**: Mandatory rotation of Residential IPs to prevent blocking.
 *   **Logger Module**: Centralized logging (Error, Info, Warning).
 
 ### D. User & Subscription Management
 *   **Subscription Manager**: Handle User Lifecycles (Paid -> Expired -> Renewed).
+*   **Pricing Structure**: **Unified Paid Tier (₹499/mo) is a baseline sample**. The final model can be tiered based on the volume of requests/cases allowed.
 *   **Payment Gateway**: Integration with **Razorpay** (recurring mandate via UPI/Cards).
-*   **User Rights**: "Delete Account" button (Right to Erasure) to permanently wipe user data from DB.
+*   **User Rights**: "Delete Account" button (Right to Erasure) to permanently wipe user data from DB and Backups (Disclaimer: Deletion from system logs is tedious and excluded).
 
 ### E. Security & Compliance (DPDP Act 2023)
 *   **Data Encryption**: AES-256 for all PII and Case Data at rest.
 *   **Data Residency**: Hosting in **India (Mumbai)** region to ensure compliance.
-*   **Consent**: "Opt-in" tracking for clients with clear Notice.
+*   **Consent**: "Opt-in" tracking required. **Consent must be explicitly stored in the user data schema along with case data.**
 *   **Liability**: Non-compliance carries penalties up to **₹250 Crores**. Strict adherence is mandatory.
 
 ### F. Contributor Advocate (Source)
 *   **Responsibility**: Provide ground-level intelligence (Crowdsourcing).
 *   **Workflow**:
     1.  **Voice Note**: Records "Aaj court 5 mein judge sahab nahi aaye".
-    2.  **Verification**: System transcribes and verified against live board data.
+    2.  **Verification**: System performs Speech-to-Text on the voice note and verifies it against the data available on the websites.
 
 ### G. Support & Feedback
 *   **Feedback/Ticket Module**:
@@ -103,6 +106,7 @@ Building a scalable, AI-powered **Legal Practice Management Platform** for Advoc
 > — Team NyayaTrack
 
 ### B. Real-Time Court Room Alert
+*Note: System must include logic to **prevent duplicate WhatsApp notifications** for the same event.*
 > **Template**:
 > ⚠️ **NYAYATRACK ALERT: Case Incoming!**
 > Adv. {Name} ji, aapka case **Item No. {My_Item}** ({Court_Name}) abhi call hone wala hai.
@@ -171,6 +175,15 @@ While our primary strategy is custom scraping, the following commercial APIs exi
 *   **Status**: **No Commercial API Exists**.
 *   **Reason**: Land records are state subjects. Internal government APIs are not public.
 *   **Strategy**: **Custom Scraper** is mandatory for `Apna Khata` and `GCMS`.
+
+### 3. Captcha Strategy (2025 Research)
+*   **Primary Provider**: **2Captcha** (Human-based).
+    *   **Pros**: Proven reliability with an **approximate 90% success rate**.
+    *   **Cons**: Slower (15-45s average). **Caution**: Success rate can drop or downtime increase due to the rising complexity of automated/AI-generated captchas.
+*   **Alternative**: **Capsolver** (AI-based).
+    *   **Pros**: Fast (3-6s).
+    *   **Use Case**: Fallback if 2Captcha latency breaches SLA (>60s) for Real-time alerts.
+*   **Verdict**: Start with 2Captcha for **Phase 0** (Accuracy > Speed). Evaluate Capsolver for **Pro Tier** real-time alerts.
 
 ### Recommendation
 *   **Hybrid Approach**: Build scrapers for Rajasthan-specific portals (Land/Revenue). Consider **LegalKart API** for Court Data if scraper stability becomes a blocker.

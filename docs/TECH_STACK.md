@@ -24,7 +24,12 @@ The stack is chosen for **performance** (handling concurrent scraping), **scalab
 *   **Processing**:
     1.  `FastAPI` receives file.
     2.  `Whisper` (or Gemini) transcodes Speech-to-Text.
-    3.  `Gemini 1.5` parses text to JSON.
+    3.  **Cross-Verification**: Transcribed text is verified against available website data to ensure accuracy.
+    4.  `Gemini 1.5` parses verified text to JSON.
+
+### 2b. Scraping Stack
+*   **Engine**: Playwright (Python). Extracts text only; **No OCR** is performed on documents.
+*   **Captcha**: **2Captcha** API (~90% success rate, though susceptible to AI captcha advancements).
 
 
 ### 3. Database: Multi-Tenancy Strategy

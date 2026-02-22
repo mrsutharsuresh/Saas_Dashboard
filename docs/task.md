@@ -1,10 +1,10 @@
 # Legal SaaS Tasks (Rajasthan + Central Pilot)
 
 ## Phase 0: Expanded POC - Feasibility Check
-- [ ] **Setup & Config**
-    - [ ] Repo Initialization (FastAPI + Playwright).
-    - [ ] API Keys: OpenAI, 2Captcha, Razorpay.
-    - [ ] **Logger Module**: `structlog` setup (Local File).
+- [x] **Setup & Config**
+    - [x] Repo Initialization (FastAPI + Playwright).
+    - [x] API Keys: OpenAI, 2Captcha, Razorpay.
+    - [x] **Logger Module**: `structlog` setup (Local File).
 - [ ] **Integration Tests (Strict Scope)**
     - [ ] **eCourts Services**: Fetch 1 Rajasthan District Case.
     - [ ] **eCourts Judgments**: Fetch 1 Judgment PDF (`judgments.ecourts`).
@@ -44,11 +44,13 @@
     - [ ] Admin Ticket View.
 
 ## Phase 3: Legal Intelligence
+- [ ] **Data Pipeline**
+    - [ ] **Filing Reconciliation** (Diary No -> Case No Matcher).
+    - [ ] **Indian Kanoon / Judgments API** Wrapper.
 - [ ] **Voice Pipeline**
     - [ ] Audio Upload + Whisper + Gemini "Hinglish" Extractor.
 - [ ] **RAG Engine**
-    - [ ] Indian Kanoon API Wrapper.
-    - [ ] Vector Search Logic.
+    - [ ] `pgvector` Integration (Vector Search Logic).
 
 ## Phase 4: Frontend (Advocate PWA)
 - [ ] **App Structure**

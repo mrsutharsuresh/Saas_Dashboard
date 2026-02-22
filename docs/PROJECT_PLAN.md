@@ -4,8 +4,8 @@
 **Project Name**: NyayaTrack (Pilot Edition)
 **Goal**: Automate case tracking for **Rajasthan & Central Courts** with Real-Time Alerts, Secure Data, and Subscription Management.
 **Strategy**: **Broad POC First** (Validate all portals) -> **Secure Core Engine** (DPDP Compliant Scrapers).
-**Timeline**: **18-20 Weeks** (4.5 - 5 Months).
-**Budget**: **₹2.6L - ₹3.0L** (Development) + **~₹15k/mo** (Operational).
+**Timeline**: **24-28 Weeks** (6 - 7 Months) based on a ~485-hour dev cycle.
+**Budget**: **₹4.7L - ₹5.9L** (Development - Mid-Level Freelance Pod) + **~₹12k-₹15k/mo** (Operational).
 
 ## Key Modules
 1.  **Core Scrapers**: Rajasthan High Court (Live Board), eCourts (District), Revenue, Land, Supreme Court.
@@ -18,9 +18,17 @@
 
 | Phase | Duration | Focus Area | Deliverables |
 | :--- | :--- | :--- | :--- |
-| **Phase 0** | **Weeks 1-4** | **Broad POC** | Connectivity Proofs for eCourts, HC, Revenue, Land, WhatsApp, Payment, Encryption. |
-| **Phase 1** | **Weeks 5-8** | **Secure Engine** | `AbstractScraper` Core + AES Encryption + Proxy Manager. |
-| **Phase 2** | **Weeks 9-11** | **Backend Biz Logic**| Subscription (Razorpay), Auth (Consent Log), Support Module. |
-| **Phase 3** | **Weeks 12-15**| **Intelligence** | Voice-to-Text Pipeline + Indian Kanoon RAG. |
-| **Phase 4** | **Weeks 16-19**| **Frontend (PWA)** | Advocate Dashboard, Decrypted View, Ticket UI. |
-| **Phase 5** | **Week 20**    | **Release** | Production Deploy (Docker/SSL), User Manuals. |
+| **Phase 0** | **Weeks 1-5** | **Expanded POC (125 Hrs)** | 1. Scraping Proof (HC/Central/RJ) |
+| | | | 2. WhatsApp API (w/ Deduplication) |
+| | | | 3. Database Schema (pgvector) |
+| | | | 4. Basic Dashboard UI |
+| | | | 5. Voice Input UI Component |
+| | | | 6. Whisper Speech-to-Text Proof |
+| | | | 7. RAG Proof (Kanoon/Judgments) |
+| | | | 8. Central Logger (`structlog`) |
+| | | | 9. LLM Integration Proof (Gemini JSON) |
+| **Phase 1** | **Weeks 6-9** | **Secure Engine** | `AbstractScraper` Core + AES Encryption + Proxy Manager + Auto-Healing. |
+| **Phase 2** | **Weeks 10-12**| **Backend Core**| Subscription (Razorpay), Auth (Consent Schema), Support Tickets. |
+| **Phase 3** | **Weeks 13-16**| **Intelligence** | Verified Voice-to-JSON Pipeline + Full RAG Search. |
+| **Phase 4** | **Weeks 17-21**| **Frontend PWA** | Advocate Dashboard, Decrypted View, UI Polish. |
+| **Phase 5** | **Weeks 22-23**| **Release/QA** | Production Deploy (Docker/SSL), Documentation & Handover. |

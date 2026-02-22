@@ -11,7 +11,11 @@
     *   **Reason**: Playwright is memory hungry. If a browser crashes, it shouldn't take down the Web API.
 *   **Proxy Rotation**:
     *   For government portals, simple IPs often get rate-limited.
-    *   *Implementation Note*: We may need to integrate a proxy rotation service (like BrightData or similar) if the 1,000 requests come from a single IP.
+    *   **Implementation Note**: We may need to integrate a proxy rotation service (like BrightData or similar) if the 1,000 requests come from a single IP.
+*   **Captcha Strategy**:
+    *   **Primary Provider**: 2Captcha has a proven success rate of approx 90%.
+    *   **Risk**: Captchas are becoming more complex with the advancement of AI, which may cause this success rate to drop. Health checks are essential.
+*   **No OCR Policy**: Scraper strictly extracts data from the website DOM. OCR for case documents is out of scope to maintain system efficiency.
 
 ## WhatsApp Integration Findings
 *   **Meta Cloud API** is the modern standard (replacing the old On-Premise API).

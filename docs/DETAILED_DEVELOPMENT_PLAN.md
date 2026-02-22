@@ -1,111 +1,94 @@
 # Legal SaaS Development Plan (Rajasthan + Central Pilot)
 
-**Total Estimated Duration**: 18-20 Weeks (4.5 - 5 Months)
-**Strategy**: Broad POC first (Phase 0), then Deep Dive into Core Engine & Security (Phase 1).
+**Total Estimated Duration**: 24-28 Weeks (6 - 7 Months) - *Relaxed schedule to accommodate advanced complexities.*
+**Strategy**: Expanded POC first (Phase 0), then Deep Dive into Core Engine & Security (Phase 1).
+**Total Estimated Effort**: ~485 Hours
 
 ---
 
-## Phase 0: Expanded POC - Feasibility Check (Weeks 1-4)
-*Goal: Prove basic connectivity with ALL target systems (Breadth-First).*
+## Phase 0: Expanded POC - Feasibility Check (Weeks 1-5)
+*Goal: Systematically prove all crucial high-risk technical integrations before building business logic.*
 
-| Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **0.1** | **Setup** | Repo, Env, API Keys (Razorpay, OpenAI, 2Captcha) | Standalone | None | 8 |
-| **0.2** | **Logger Module** | Basic `structlog` setup (File/Console) | Linked | 0.1 | 4 |
-| **0.3** | **eCourts (District)** | Fetch 1 Case from `services.ecourts` (RJ District) | Linked | 0.2 | 5 |
-| **0.4** | **eCourts Judgments** | Fetch 1 Judgment PDF from `judgments.ecourts` | Linked | 0.2 | 4 |
-| **0.5** | **High Court Test**| Script to poll `hcraj.nic.in` Display Board (10 mins) | Linked | 0.1 | 8 |
-| **0.5** | **Revenue/Land** | Script to fetch status from `gcms` & `apnakhata` (Basic) | Linked | 0.1 | 8 |
-| **0.6** | **Whatsapp Test** | Send "Hello World" Template via Twilio/Meta Sandbox | Linked | 0.1 | 4 |
-| **0.7** | **Voice Test** | Transcribe 1 sample Audio -> JSON via Whisper | Linked | 0.1 | 4 |
-| **0.8** | **Legacy API** | Fetch 1 Judgment from Indian Kanoon API | Linked | 0.1 | 3 |
-| **0.9** | **Central Test** | Fetch 1 Case from Supreme Court (`sci.gov.in`) | Linked | 0.2 | 6 |
-| **0.10** | **Rajasthan Test** | Poll `hcraj` Live Board + Fetch `apnakhata` | Linked | 0.2 | 10 |
-| **0.11** | **Payment Test** | Create Razorpay Order + Verify Signature | Linked | 0.1 | 4 |
-| **0.12** | **Integration** | Live Alert Demo (Mocked Data -> WhatsApp) | Linked | 0.5, 0.6 | 5 |
-
-**POC Total**: ~45 Hours (Weeks 1-4)
+**Detailed POC Breakdown**: The POC Phase has been rigorously broken down into a 36-step, hour-by-hour action plan. 
+Please refer to the separate **[POC_DETAILED_DEVELOPMENT_PLAN.md](POC_DETAILED_DEVELOPMENT_PLAN.md)** for the granular task list.
+*   **Total POC Effort**: **125 Hours**
 
 ---
 
-## Phase 1: Core Engine, Security & Proxy (Weeks 5-8)
-*Focus: Robust Scraper Engine with Security & Compliance.*
+## Phase 1: Core Engine & Proxy / Security (Weeks 6-10)
+*Focus: Robust Scraper Engine with strict Data Privacy (DPDP Act).*
 
-| Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **1.1** | **Scraper Core** | `BaseScraper` Class + `StateAdapter` Pattern | Standalone + `AbstractScraper` + `ProxyManager` Implementation | Standalone | 0.2 | 15 |
-| **1.2** | **Security Layer** | **AES-256 Encryption** Utility for DB Storage | Linked | 1.1 | 8 |
-| **1.3** | **Proxy Manager** | Rotating Residential IPs + User-Agent Spoofing | Linked | 1.1 | 10 |
-| **1.4** | **eCourts Adapter** | Production District Court Scraper (Rajasthan) | Linked | 1.1 | 15 |
-| **1.5** | **Central Adapter** | Supreme Court Scraper (Full Implementation) | Linked | 1.1 | 12 |
-| **1.6** | **State Adapter** | Rajasthan HC + Revenue + Land Scrapers | Linked | 1.1 | 15 |
-
-**Phase 1 Total**: ~70 Hours (Weeks 5-8)
+| Task ID | Task Name | Sub-task | Dependency | Est. Hrs |
+| :--- | :--- | :--- | :--- | :--- |
+| **1.1** | **Scraper Core** | Build `AbstractScraper` + implements **Auto-Healing / Health Checks**. | 0.1 | 20 |
+| **1.2** | **Security Layer** | **AES-256-GCM** encryption utilities for all DB writes/reads (PII mask). | 0.3 | 15 |
+| **1.3** | **Proxy Manager** | Service to rotate IPs on `429/403` and handle 2Captcha load balancing. | 1.1 | 15 |
+| **1.4** | **Central Adapters**| Production-grade scrapers: Supreme Court, eCourts District, eCourts Judgments. | 1.1 | 15 |
+| **1.5** | **State Adapters**| Production-grade scrapers: `hcraj` Live Board polling, `apnakhata`, `gcms`. | 1.1 | 15 |
+| | | **Phase 1 Total** | | **80** |
 
 ---
 
-## Phase 2: Backend, Payments & Support (Weeks 9-11)
-*Focus: Scalable Monolith & Business Logic.*
+## Phase 2: Backend DB, Subscriptions & Auth (Weeks 11-14)
+*Focus: Multi-tenant business logic and Consent Schemas.*
 
-| Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **2.1** | **Database** | Postgres Schema (Encrypted Columns) | Standalone | None | 10 |
-| **2.2** | **Auth System** | JWT + Opt-in Audit Log + **Delete Account API** | Linked | 2.1 | 8 |
-| **2.3** | **Subscription** | **Razorpay Integration** (Recurring/One-time) | Linked | 2.2 | 12 |
-| **2.4** | **Admin Dashboard** | React Panel for System Health & User Mgmt | Linked | 2.2 | 12 |
-| **2.5** | **Support Module** | Ticket API + Admin Dashboard for Issues | Linked | 2.2 | 10 |
-
-**Phase 2 Total**: ~40 Hours (Weeks 9-11)
-
----
-
-## Phase 3: Intelligence & RAG (Weeks 12-15)
-*Focus: "The Brain".*
-
-| Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **3.1** | **Voice Pipeline** | API Endpoint + Whisper + Gemini "Hinglish" Extractor | Standalone | 2.2 | 15 |
-| **3.2** | **Legal RAG** | **Indian Kanoon API** Wrapper | Linked | 2.2 | 5 |
-| | | Ingest **eCourts Judgments** (PDF -> Text -> Vector) | Linked | 3.2 | 10 |
-| | | Vector Search (pgvector) for "Similar Cases" | Linked | 3.2 | 12 |
-| | | "Outcome Probability" Logic (LLM Analysis) | Linked | 3.2 | 12 |
-
-**Phase 3 Total**: ~44 Hours (Weeks 12-15)
+| Task ID | Task Name | Sub-task | Dependency | Est. Hrs |
+| :--- | :--- | :--- | :--- | :--- |
+| **2.1** | **DB Schema Final**| Finalize Advocate, Case, Subscription tables with mandatory `consent_given` Boolean. | 1.2 | 10 |
+| **2.2** | **Auth System** | JWT logins + **Delete Account API** (Explicitly wipes DB/S3, skips tedious logs). | 2.1 | 10 |
+| **2.3** | **Subscriptions** | Razorpay Recurrent Mandates APIs + Tiered limit logic. | 2.1 | 20 |
+| **2.4** | **Support Module** | Ticket APIs for users to report mismatched web vs parsed data. | 2.1 | 10 |
+| **2.5** | **Alerts Engine** | Celery + Redis queues. Trigger WABA API safely preventing duplicates. | 0.2, 2.1| 10 |
+| | | **Phase 2 Total** | | **60** |
 
 ---
 
-## Phase 4: Advocate Dashboard PWA (Weeks 16-19)
-*Focus: Mobile Interface.*
+## Phase 3: Intelligence & RAG Integration (Weeks 15-18)
+*Focus: verified parsing and semantic search.*
 
-| Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **4.1** | **Case Portfolio** | Decrypted View: "My Daily Board" | Standalone | 2.1 | 15 |
-| **4.2** | **Alerts Hub** | UI to Draft & Approve Client Messages | Linked | 4.1 | 10 |
-| **4.3** | **Voice Recorder** | Audio Capture UI + Upload | Linked | 4.1 | 8 |
-| **4.4** | **Search UI** | Interface for RAG/Similar Case Search | Linked | 3.2 | 8 |
-| **4.5** | **Support UI** | "Report Issue" Form + Ticket Status View | Linked | 2.4 | 8 |
-| **4.6** | **Subscription UI** | Payment Gateway Integration + History | Linked | 2.3 | 8 |
-
-**Phase 4 Total**: ~41 Hours (Weeks 16-19)
+| Task ID | Task Name | Sub-task | Dependency | Est. Hrs |
+| :--- | :--- | :--- | :--- | :--- |
+| **3.1** | **Verified Voice** | Web Audio -> Whisper -> **Cross-verify text vs DB state** -> Gemini JSON. | 0.6, 0.9| 20 |
+| **3.2** | **Kanoon Wrapper** | API limits handling for fetching older precedents via Indian Kanoon. | - | 10 |
+| **3.3** | **RAG Pipeline** | eCourts PDFs -> `text-embedding-3-small` -> `pgvector` index storage. | 0.7 | 15 |
+| **3.4** | **Semantic Search**| API endpoint to take Advocate query, fetch vectors, and return Gemini LLM summary. | 3.3 | 15 |
+| | | **Phase 3 Total** | | **60** |
 
 ---
 
-## Phase 5: Production & Handoff (Week 20)
-| Task ID | Task Name | Sub-task | Type | Dependency | Est. Hrs |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **5.1** | **Deploy** | Docker Compose + VPS (Nginx, SSL, Redis) | Standalone | None | 10 |
-| **5.2** | **Docs** | API Documentation + Video Guide | Linked | None | 8 |
+## Phase 4: Advocate PWA Frontend (Weeks 19-24)
+*Focus: Mobile-First interface (Vite + React).*
 
-**Phase 5 Total**: ~18 Hours
+| Task ID | Task Name | Sub-task | Dependency | Est. Hrs |
+| :--- | :--- | :--- | :--- | :--- |
+| **4.1** | **Case Portfolio** | Decrypted "Daily Board" View UI. | 2.1 | 20 |
+| **4.2** | **Consent UI** | Onboarding screens ensuring DPDP Opt-In explicit logging. | 2.2 | 15 |
+| **4.3** | **Integrate UI** | Hook up Web Audio Recorder (4.3), Support Tickets (4.4), RAG Search UI (4.5), and WABA opt-ins to APIs. | 3.1, 3.4| 40 |
+| **4.4** | **Payment Portal** | Secure Razorpay client-side integration and Subscription history. | 2.3 | 15 |
+| **4.5** | **UI/UX Polish** | PWA Manifest (`manifest.json`), Offline caching, Mobile responsiveness. | 4.3 | 10 |
+| | | **Phase 4 Total** | | **100** |
 
 ---
 
-## 6. Risk Management & Contingencies (Merged Research)
+## Phase 5: Production & Handoff (Weeks 25-28)
+*Focus: Buffer time for complex testing, scaling, and deployment.*
+
+| Task ID | Task Name | Sub-task | Dependency | Est. Hrs |
+| :--- | :--- | :--- | :--- | :--- |
+| **5.1** | **Sys Load Tests** | Test 100 concurrent scrapers + PgBouncer setup. | 1.1 | 15 |
+| **5.2** | **Deploy Strategy**| Docker Compose + DigitalOcean VPS (Nginx, SSL, Redis). | - | 15 |
+| **5.3** | **QA & Buffer** | Fix edge cases across WA dedupe, Proxy blocks, or UI bugs. | All | 20 |
+| **5.4** | **Documentation**| Finalize API swagger, Architecture handover docs. | 5.2 | 10 |
+| | | **Phase 5 Total** | | **60** |
+
+---
+
+## 6. Risk Management & Contingencies (Synced)
 
 | Risk Category | Potential Issue | Mitigation Strategy |
 | :--- | :--- | :--- |
-| **Technical** | `hcraj` changes CAPTCHA / DOM structure | **Auto-Healing Scrapers**: Detect changes -> Pause -> Alert Admin. Fallback to Contributor verification. |
-| **Legal** | eCourts bans IP range | **Rotating Proxies**: Use residential IPs. Implement "Ethical Rate Limiting" (1 req/min). |
-| **Business** | WhatsApp API Price Hike | **Hybrid Notification**: Switch low-priority alerts to Email/Push Notifications + SMS. |
-| **Data** | Stale Case Status | **Crowdsourcing**: Incentivize Junior Advocates to verify status manually. |
-| **Compliance** | DPDP Act Audit | **AES-256 Encryption**: All PII encrypted at rest. strict Opt-in logs maintained. |
+| **Technical** | `hcraj` DOM changes | **Auto-Healing/Health Checks**: Detect structural changes -> Pause -> Alert Admin immediately via `structlog`. |
+| **Technical** | 2Captcha success drops due to new AI | Implement rapid fallback to AI solvers (Capsolver) for high-priority alerts. |
+| **Legal/Compliance** | DPDP Act Audit | **AES-256 Encryption** at rest. Mandatory Boolean `consent_given` in DB schemas. "Delete Account" strictly wipes DB/S3 schemas. |
+| **Notification** | WABA Rate Limits & Duplicates | Strict Redis caching checks before triggering a Meta API Template to prevent double-billing. |
+| **Data Quality** | Hallucinations in Voice AI | Implement logic to **Cross-verify** Whisper extracted case names/dates against the available scraped website state. |

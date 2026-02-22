@@ -2,10 +2,10 @@
 
 ## 1. Scraping Roadblocks
 **Risk**: Government portals often have CAPTCHAs, rate limiting, and IP bans.
-*   **Captchas**: Simple text captchas can sometimes be solved by OCR (Tesseract). Complex ones (ReCaptcha/Cloudflare) require paid services like **2Captcha** or **CapSolver** (~$0.50 per 1000 solutions).
+*   **Captchas**: We rely on **2Captcha** given its proven ~90% success rate. *Risk*: Success rates may dip due to AI advancements introducing more complex captchas.
 *   **IP Bans**: Scraper needs **Residential Proxies** (e.g., BrightData, Smartproxy) if requests > 100/day.
-*   **Structure Changes**: If the Govt portal changes HTML, scraper fails.
-    *   **Mitigation**: "Canary Tests" runs daily. If it fails, Admin gets an SMS/Email immediately.
+*   **UI/Structure Changes**: Government portal UI changes will result in scraper failure.
+    *   **Mitigation**: Implement robust **Health Checks** connected to alert systems.
 
 ## 2. Voice AI Accuracy (Hinglish)
 **Risk**: Mixed Hindi-English audio is hard for standard models.
@@ -23,17 +23,20 @@
     *   **Local MVP**: Save files to a `media/` folder on the disk.
     *   **Why**: S3 is infinitely scalable and cheap ($5/TB). Postgres is expensive to scale.
 
-## 4. Scaling Bottlenecks
+## 4. Privacy & Logs Deletion
+**Risk**: Handling "Delete Account" requests securely.
+*   **Fix**: Wipe data from DB + S3 Backups. Modifying logs is explicitly excluded as it's too tedious. Ensure Consent is captured explicitly in DB.
+
+## 5. Scaling Bottlenecks
 *   **Bottleneck 1: Database Connections**: usage spikes at 6 AM (Daily Brief).
-    *   **Fix**: Use **PgBouncer** (Connection Pooling) to handle 1000s of connections.
+    *   **Fix**: Use **PgBouncer** (Connection Pooling).
 *   **Bottleneck 2: Scraper Memory**: Browser automation (Playwright) eats RAM (~500MB per tab).
-    *   **Fix**: Queue system (Celery). Limit concurrent scrapes to `CPU_CORES * 2`.
+    *   **Fix**: Queue system (Celery). Limit concurrent scrapes.
 
-## 5. Hardware & Hosting Requirements
-**Decision**: Self-Host Models vs Use APIs?
-*   **Choice**: **Use APIs** (Gemini/OpenAI).
-    *   *Reason*: Running Whisper-Large + LLM requires ~24GB VRAM GPU ($500/mo server). APIs cost pay-as-you-go (~$10/mo).
-
+## 6. Hardware & Hosting Requirements
+**Choice**: Use APIs (Gemini/OpenAI) to save GPU server costs.
+**Recommended Config**:
+*   DigitalOcean Droplet with 4-8GB RAM (Playwright needs RAM).
 **Recommended Server Config (using APIs):**
 *   **Provider**: DigitalOcean Droplet / AWS t3.medium
 *   **Specs**:
